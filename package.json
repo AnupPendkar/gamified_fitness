@@ -12,7 +12,13 @@
     "studio": "drizzle-kit studio --port 9005"
   },
   "dependencies": {
+    "@emotion/cache": "^11.11.0",
+    "@emotion/react": "^11.11.4",
+    "@emotion/server": "^11.11.0",
+    "@emotion/styled": "^11.11.5",
+    "@mui/material-nextjs": "^5.15.11",
     "@vercel/postgres": "^0.8.0",
+    "dayjs": "^1.11.11",
     "dotenv": "^16.4.5",
     "drizzle-orm": "^0.29.3",
     "next": "14.2.3",

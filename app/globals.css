@@ -1,33 +1,63 @@
+@import '/css/_variable.css';
+@import '/css/_scrollbar.css';
+@import '/css/_fonts.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
-}
+  --color-primary: #151515;
+  --color-secondary: #202023;
+  --color-ternary: #0f151b;
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
+  --color-success: #baf247;
+
+  --color-background: #151515;
+
+  --color-text-primary: #dddde1;
+  --color-text-secondary: #81809e;
+
+  --color-text-primary-dark: #191919;
+  --color-text-secondary-dark: #3a3945;
 }
 
 body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
+.App {
+  width: 100vw;
+  height: 100vh;
+  display: grid;
+  padding: 0 20px;
+  overflow: auto;
+  grid-template:
+    [header] 'head head' max-content [header-right]
+    [main-left] 'nav main' 1fr [main-right]
+    [footer-left] 'nav  foot' max-content [footer-right]
+    / max-content 1fr;
+}
+
+.app-header {
+  grid-area: head;
+}
+
+.app-sidebar {
+  grid-area: nav;
+}
+
+.app-main {
+  grid-area: main;
+  overflow: auto;
+  margin-top: 25px;
+
+  font-size: 16px;
+}
+
+.app-footer {
+  grid-area: foot;
+  margin-bottom: 20px;
 }
