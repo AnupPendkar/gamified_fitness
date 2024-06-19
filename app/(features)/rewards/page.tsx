@@ -1,3 +1,5 @@
+import Date from "@/app/shared/Date";
+
 const Rewards = () => {
   const rewards = [
     {
@@ -29,6 +31,8 @@ const Rewards = () => {
 
   return (
     <div>
+      <Date />
+
       {rewards?.map((itm) => (
         <div key={itm?.id} className="flex items-center justify-between px-4 h-[46px] mb-4 rounded-md" style={{ background: 'var(--color-secondary)' }}>
           <p className="font-isb">{itm?.name}</p>
