@@ -41,6 +41,10 @@ body {
     / max-content 1fr;
 }
 
+* {
+  font-family: 'Inter Regular';
+}
+
 .app-header {
   grid-area: head;
 }

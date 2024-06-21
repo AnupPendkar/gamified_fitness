@@ -1,4 +1,4 @@
-import Date from "@/app/shared/Date";
+import Date from '@/app/shared/Date';
 
 const Rewards = () => {
   const rewards = [
@@ -34,9 +34,9 @@ const Rewards = () => {
       <Date />
 
       {rewards?.map((itm) => (
-        <div key={itm?.id} className="flex items-center justify-between px-4 h-[46px] mb-4 rounded-md" style={{ background: 'var(--color-secondary)' }}>
+        <div key={itm?.id} className="flex items-center justify-between px-4 h-[46px] mb-4 rounded-md bg-secondary">
           <p className="font-isb">{itm?.name}</p>
-          <p style={{ color: 'var(--color-success)' }}>+{itm?.xp}xp</p>
+          <p className="text-success">+{itm?.xp}xp</p>
         </div>
       ))}
     </div>
