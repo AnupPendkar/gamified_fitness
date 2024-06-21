@@ -16,8 +16,9 @@ const Date = () => {
 
   return (
     <div ref={dateContainerRef} className="flex overflow-auto mb-5 gap-x-4 md:gap-x-7">
-      {getAllDatesWithDays(2024, 6)?.map((itm) => (
+      {getAllDatesWithDays(2024, 6)?.map((itm, idx) => (
         <div
+          key={idx}
           className={`flex flex-col items-center justify-center rounded-lg px-3 py-2 w-[55px] ${
             getTodaysDate()?.date === itm?.date ? 'today bg-success text-primary_text_dark' : 'bg-secondary'
           }`}

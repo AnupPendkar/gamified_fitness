@@ -1,5 +1,8 @@
+'use client';
+
 import Date from '@/app/shared/Date';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 
 const Home = () => {
   const workoutList = [
@@ -46,13 +49,20 @@ const Home = () => {
       time: 12,
     },
   ];
+
+  const router = useRouter();
+
+  function handleWorkoutClk(id) {
+    router.push(`/home/${id}`);
+  }
+
   return (
     <div>
       <Date />
 
       <div className="flex flex-wrap items-center justify-between">
         {workoutList?.map((itm) => (
-          <div key={itm?.id} className="flex flex-col items-center justify-between px-4 w-[150px] py-2 mb-6 rounded-lg bg-secondary">
+          <div key={itm?.id} onClick={() => handleWorkoutClk(itm?.id)} className="flex flex-col items-center justify-between px-4 w-[150px] py-2 mb-6 rounded-lg bg-secondary">
             <p className="font-isb text-[16px]">{itm?.name}</p>
             <Image src={itm?.src} width={64} height={32} alt={itm?.name} />
 
