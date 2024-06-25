@@ -1,5 +1,6 @@
 'use client';
 
+import { EIntensity } from '@/app/typings/common';
 import { Table, TableContainer, Paper, TableHead, TableRow, TableCell, TableBody, styled, Stack, Skeleton, Tooltip } from '@mui/material';
 import { useEffect, useState } from 'react';
 const SetTable = () => {
@@ -35,13 +36,26 @@ const SetTable = () => {
     setDatasource(dsObj);
   }
 
+  function getStringFromIntensityEnum(id: EIntensity) {
+    switch (id) {
+      case EIntensity.LIGHT:
+        return 'Light';
+
+      case EIntensity.MODERATE:
+        return 'Moderate';
+
+      case EIntensity.INTENSE:
+        return 'Intense';
+    }
+  }
+
   useEffect(() => {
     constructDatasource();
   }, []);
 
   return (
     <>
-      <TableContainer >
+      <TableContainer>
         <Table size="medium" sx={{ backgroundColor: (theme) => theme.palette.primary.main }}>
           <TableHead sx={{ position: 'sticky' }}>
             <TableRow
@@ -60,23 +74,23 @@ const SetTable = () => {
           <TableBody>
             {datasource?.map((itm) => (
               <TableRow>
-                <TableCell align="center" width={'25%'}>
-                  <span className="fsr-16 font-isb ">Dqw {itm?.id}</span>
+                <TableCell align="center" width={'40%'}>
+                  <span className="fsr-16 font-isb ">{itm?.id}</span>
                   {/* <span className="fsr-16 font-isb ">Set {itm?.id}</span> */}
                 </TableCell>
 
-                <TableCell align="center" width={'25%'}>
+                <TableCell align="center" width={'15%'}>
                   <span className="fsr-16 font-isb ">{itm?.weight} Iw</span>
                   {/* <span className="fsr-16 font-isb ">{itm?.weight} Kg</span> */}
                 </TableCell>
 
-                <TableCell align="center" width={'25%'}>
-                  <span className="fsr-16 font-isb ">{itm?.reps} Qwry</span>
+                <TableCell align="center" width={'20%'}>
+                  <span className="fsr-16 font-isb ">{itm?.reps}</span>
                   {/* <span className="fsr-16 font-isb ">{itm?.reps} Reps</span> */}
                 </TableCell>
 
                 <TableCell align="center" width={'25%'}>
-                  <span className="fsr-16 font-isb ">{itm?.intensity}</span>
+                  <span className="fsr-16 font-isb ">{getStringFromIntensityEnum(itm?.intensity)}</span>
                   {/* <span className="fsr-16 font-isb ">{itm?.intensity}</span> */}
                 </TableCell>
               </TableRow>

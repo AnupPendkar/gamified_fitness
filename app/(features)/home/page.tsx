@@ -1,6 +1,7 @@
 'use client';
 
 import Date from '@/app/shared/Date';
+import { IDate } from '@/app/typings/common';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
@@ -56,15 +57,19 @@ const Home = () => {
     router.push(`/home/${id}`);
   }
 
+  function getSelectedDate(date: IDate): void {
+    console.log(date);
+  }
+
   return (
-    <div>
-      <Date />
+    <div className="p-global">
+      <Date getSelectedDate={getSelectedDate} />
 
       <div className="flex flex-wrap items-center justify-between">
         {workoutList?.map((itm) => (
-          <div key={itm?.id} onClick={() => handleWorkoutClk(itm?.id)} className="flex flex-col items-center justify-between px-4 w-[150px] py-2 mb-6 rounded-lg bg-secondary">
+          <div key={itm?.id} onClick={() => handleWorkoutClk(itm?.id)} className="flex flex-col items-center justify-between px-4 w-[150px] py-2 mb-5 rounded-lg bg-secondary">
             <p className="font-isb text-[16px]">{itm?.name}</p>
-            <Image src={itm?.src} width={64} height={32} alt={itm?.name} />
+            <Image src={itm?.src} width={64} height={30} alt={itm?.name} />
 
             <div className="flex items-center justify-center gap-x-1 text-[14px] w-full">
               <p className="text-primary_text">{itm?.sets} Sets</p>

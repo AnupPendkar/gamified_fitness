@@ -7,15 +7,15 @@ const page = ({ params }) => {
   const titles = ['sdf', 'vdtr', 'oweur', 'voweir', 'vqweor', 'qowie', 'zperope'];
 
   return (
-    <div style={{ display: 'grid', gridTemplate: 'max-content minmax(0, 1fr) / 1fr', height: '100%', overflow: 'hidden' }}>
+    <div className="p-global grid overflow-hidden h-full" style={{ gridTemplate: 'max-content minmax(0, 1fr) / 1fr' }}>
       <Back title="dfdf" path="/home" />
 
-      <div style={{ display: 'grid', gridTemplate: 'max-content max-content minmax(0, 1fr) / 1fr', overflow: 'hidden', height: '100%' }}>
+      <div className="grid overflow-hidden h-full" style={{ gridTemplate: 'max-content max-content minmax(0, 1fr) / 1fr' }}>
         <div className="flex items-center justify-center px-4 w-full h-[150px] py-3 mb-6 rounded-lg bg-secondary">
           <Image src={'../images/badge_rookie.svg'} width={64} height={32} alt={'rookie'} />
         </div>
 
-        <div className="leading-7 mb-3">
+        <div className="leading-7 mb-5">
           <span className="text-primary_text font-isb mr-2">Title:</span>
           {titles?.map((itm, idx) => (
             <>
@@ -25,7 +25,7 @@ const page = ({ params }) => {
           ))}
         </div>
 
-        <div className="grid" style={{ height: '100%' }}>
+        <div className="grid h-full">
           <SetTable />
         </div>
       </div>

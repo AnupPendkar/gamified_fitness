@@ -18,6 +18,15 @@ const config: Config = {
         primary_text_dark: 'var(--color-text-primary-dark)',
         secondary_text_dark: 'var(--color-text-secondary-dark)',
       },
+      padding: {
+        global: 'var(--global-padding)',
+      },
+      borderColor: {
+        success: 'var(--color-success)',
+      },
+      margin: {
+        global: 'var(--global-padding)',
+      },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
         'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',

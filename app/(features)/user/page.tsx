@@ -1,7 +1,9 @@
 const User = () => {
   return (
-    <div>User</div>
-  )
-}
+    <div className="p-global">
+      <h1>User</h1>
+    </div>
+  );
+};
 
-export default User
+export default User;

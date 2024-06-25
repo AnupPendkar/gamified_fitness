@@ -16,6 +16,10 @@ const CustomThemeProvider = (props: MyThemeProviderProps) => {
     <GlobalStyles
       styles={(theme) => ({
         // Table
+        '.MuiTableContainer-root': {
+          overflowX: 'hidden !important',
+          overflowY: 'auto !important',
+        },
         '.MuiTable-root': {
           borderCollapse: 'separate !important',
           borderSpacing: '0 5px !important',
@@ -85,6 +89,20 @@ const CustomThemeProvider = (props: MyThemeProviderProps) => {
         // Tooltip
         '.MuiTooltip-tooltip': {
           fontSize: '14px !important',
+        },
+
+        '.MuiFormControl-root MuiTextField-root': {
+          display: 'none !important',
+        },
+
+        '.MuiDialogContent-root': {
+          borderRadius: '7px',
+        },
+
+        '.MuiPickersLayout-root': {
+          '& .MuiButtonBase-root': {
+            color: '#f9f9f9 !important',
+          },
         },
       })}
     />

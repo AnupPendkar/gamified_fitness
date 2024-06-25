@@ -1,4 +1,5 @@
 import Date from '@/app/shared/Date';
+import { IDate } from '@/app/typings/common';
 
 const Rewards = () => {
   const rewards = [
@@ -29,9 +30,13 @@ const Rewards = () => {
     },
   ];
 
+  function getSelectedDate(date: IDate): void {
+    console.log(date);
+  }
+
   return (
-    <div>
-      <Date />
+    <div className="p-global">
+      <Date getSelectedDate={getSelectedDate} />
 
       {rewards?.map((itm) => (
         <div key={itm?.id} className="flex items-center justify-between px-4 h-[46px] mb-4 rounded-md bg-secondary">

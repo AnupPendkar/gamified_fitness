@@ -64,7 +64,7 @@ const Achievments = () => {
   }
 
   return (
-    <div>
+    <div className="p-global">
       <div className="current-tag flex flex-col items-center">
         <Image src={currBadge()?.src} width={100} height={100} alt={currBadge()?.name} />
         <p className="text-secondary_text max-w-[300px]">

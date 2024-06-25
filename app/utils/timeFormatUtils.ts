@@ -26,25 +26,32 @@ function getTodaysDate(): IDate {
   return {
     day: dayOfWeek,
     date: day,
+    month: today?.getMonth() + 1,
+    year: today?.getFullYear(),
+    dateObj: today,
   };
 }
+
 
 // month index starts from 0 not 1.
 function getAllDatesWithDays(year: number, month: number): IDate[] {
   const daysInWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
   let datesWithDays: IDate[] = [];
 
-  let date = new Date(year, month - 1, 1);
+  let date = new Date(year, month - 1, 1);  // month - 1 because JavaScript months are 0-indexed
 
-  let daysInMonth = new Date(year, month, 0).getDate();
+  let daysInMonth = new Date(year, month, 0).getDate(); // Correctly calculate days in month
 
-  for (let day = 1; day <= daysInMonth; day++) {
+  for (let day = 1; day <= daysInMonth; day++) {  // Loop should include the last day
     date.setDate(day);
     let dayOfWeek = daysInWeek[date.getDay()];
 
     datesWithDays.push({
       day: dayOfWeek,
       date: day,
+      month,
+      year,
+      dateObj: new Date(),
     });
   }
 

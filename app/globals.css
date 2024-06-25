@@ -20,6 +20,21 @@
 
   --color-text-primary-dark: #191919;
   --color-text-secondary-dark: #3a3945;
+
+  --global-padding: 0 20px;
+}
+
+@layer utilities {
+  .glow {
+    @apply transition-shadow duration-300;
+    box-shadow: 0 0 10px #baf247;
+    /* box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); */
+  }
+  
+  .hover\:glow:hover {
+    /* box-shadow: 0 0 10px #baf247; */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
 }
 
 body {
@@ -32,7 +47,6 @@ body {
   width: 100vw;
   height: 100vh;
   display: grid;
-  padding: 0 20px;
   overflow: auto;
   grid-template:
     [header] 'head head' max-content [header-right]
@@ -56,7 +70,7 @@ body {
 .app-main {
   grid-area: main;
   overflow: auto;
-  margin-top: 25px;
+  margin-top: 15px;
 
   font-size: 16px;
 }
@@ -65,3 +79,7 @@ body {
   grid-area: foot;
   margin-bottom: 20px;
 }
+
+/* .glow {
+  box-shadow: 0 0 50px 15px var(--color-success);
+} */
