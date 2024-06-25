@@ -13,6 +13,7 @@ const config: Config = {
         background: 'var(--color-background)',
 
         primary_text: 'var(--color-text-primary)',
+        error_text: 'var(--color-text-error)',
         secondary_text: 'var(--color-text-secondary)',
 
         primary_text_dark: 'var(--color-text-primary-dark)',

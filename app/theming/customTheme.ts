@@ -111,6 +111,7 @@ export const darkTheme = createTheme({
       styleOverrides: {
         root: {
           fontWeight: 'bold',
+          borderRadius: '8px',
           textTransform: 'unset',
 
           '&.Mui-disabled': {
@@ -124,15 +125,15 @@ export const darkTheme = createTheme({
       styleOverrides: {
         root: {
           '.MuiInputBase-root': {
-            backgroundColor: '#ffffff',
-            color: '#191919',
-            caretColor: '#191919',
-          },
-          '.MuiOutlinedInput-notchedOutline': {
-            borderColor: '#ffffff',
-          },
-          '.Mui-focused .MuiOutlinedInput-notchedOutline': {
-            borderColor: '#f1f1f1',
+            backgroundColor: 'var(--color-secondary)',
+            borderRadius: '10px',
+            color: 'var(--color-text-primary)',
+            caretColor: 'var(--color-text-primary)',
+
+            '& .MuiInputBase-input': {
+              padding: '12px 12px !important',
+              fontSize: '16px',
+            },
           },
         },
       },
@@ -192,6 +193,5 @@ export const darkTheme = createTheme({
         },
       },
     },
-    
   },
 });

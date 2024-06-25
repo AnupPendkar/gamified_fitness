@@ -16,6 +16,7 @@
   --color-background: #151515;
 
   --color-text-primary: #dddde1;
+  --color-text-error: #f52424;
   --color-text-secondary: #81809e;
 
   --color-text-primary-dark: #191919;
@@ -30,7 +31,7 @@
     box-shadow: 0 0 10px #baf247;
     /* box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); */
   }
-  
+
   .hover\:glow:hover {
     /* box-shadow: 0 0 10px #baf247; */
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
