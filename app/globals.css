@@ -56,6 +56,12 @@ body {
     / max-content 1fr;
 }
 
+input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 30px var(--color-secondary) inset !important;
+  -webkit-text-fill-color: #f9f9f9 !important;
+  caret-color: inherit !important;
+}
+
 * {
   font-family: 'Inter Regular';
 }

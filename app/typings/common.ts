@@ -24,6 +24,16 @@ export enum ELoginType {
   FORGOT_PASS__otp = 7,
 }
 
+export enum EAuthAction {
+  SIGN_IN = 1,
+  SIGN_UP = 2,
+  REQUEST_OTP = 3,
+  BACK = 4,
+  GOOGLE = 5,
+  APPLE = 6,
+  META = 7,
+}
+
 export enum ELoginField {
   NAME = 1,
   EMAIL = 2,
