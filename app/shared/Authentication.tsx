@@ -11,6 +11,7 @@ import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
+import { isPropEmpty } from '../utils/utilfunctions';
 
 const schema = z
   .object({
@@ -30,18 +31,28 @@ const schema = z
 
 export type TAuthDataSchema = z.infer<typeof schema>;
 
-const Authentication = ({ currType, onSubmit, onActionClk }: { currType: ELoginType; onSubmit: (data: TAuthDataSchema) => void; onActionClk: (type: EAuthAction) => void }) => {
+interface IAuthenticationProp {
+  currType: ELoginType;
+  onSubmit: (data: TAuthDataSchema) => void;
+  onActionClk: (type: EAuthAction) => void;
+}
+
+const Authentication = ({ currType, onSubmit, onActionClk }: IAuthenticationProp) => {
   const [otp, setOtp] = useState<string>();
   const [heading, setHeading] = useState<string>();
-  const [currLoginType, setCurrLoginType] = useState<ELoginType>();
   const [submitText, setSubmitText] = useState<string>();
   const [fields, setFields] = useState<ELoginField[]>([]);
   const [isPasswordVisible, setPasswordVisibility] = useState(false);
+
+  const [render, setRender] = useState<number>(0);
 
   const {
     register,
     getValues,
     handleSubmit,
+    clearErrors,
+    reset,
+    resetField,
     formState: { isDirty, isValid, errors },
   } = useForm<TAuthDataSchema>({
     resolver: zodResolver(schema),
@@ -98,7 +109,7 @@ const Authentication = ({ currType, onSubmit, onActionClk }: { currType: ELoginT
   }
 
   function hasLoginType(type: ELoginType[]): boolean {
-    return type.some((tp) => currLoginType === tp);
+    return type.some((tp) => currType === tp);
   }
 
   async function _onSubmit(data: TAuthDataSchema) {
@@ -109,18 +120,36 @@ const Authentication = ({ currType, onSubmit, onActionClk }: { currType: ELoginT
     onSubmit(getValues());
   }
 
-  useEffect(() => {
-    handleLoginSteps(currLoginType);
-  }, [currLoginType]);
+  function getFormValidity() {
+    console.log(!isPropEmpty(getValues()?.email), !isPropEmpty(getValues()?.password), getValues());
+    switch (currType) {
+      case ELoginType.SIGN_IN__email_pass:
+        return !isPropEmpty(getValues()?.email) && !isPropEmpty(getValues()?.password);
+
+      case ELoginType.FORGOT_PASS__email:
+        return !isPropEmpty(getValues()?.email);
+    }
+  }
 
   useEffect(() => {
-    setCurrLoginType(currType);
+    handleLoginSteps(currType);
+
+    setTimeout(() => {
+      clearErrors(['name', 'email', 'password', 'new_password', 'confirm_password']);
+    }, 100);
+  }, [currType]);
+
+  useEffect(() => {
+    // setTimeout(() => {
+    //   resetField('email');
+    //   resetField('password');
+    // }, 100);
   }, []);
 
-  return (
-    <div className="p-global pt-4">
-      {/* <Back title="" path="/home" /> */}
+  console.log('render', render);
 
+  return (
+    <div className="p-global">
       <form onSubmit={handleSubmit(_onSubmit)}>
         <div className="flex flex-col mt-4 p-global">
           <p className="text-[24px] self-center font-ib text-primary_text mb-5">{heading}</p>
@@ -134,37 +163,59 @@ const Authentication = ({ currType, onSubmit, onActionClk }: { currType: ELoginT
           )}
 
           {fields?.includes(ELoginField.EMAIL) && (
-            <div className="field flex flex-col mb-4">
+            <div className="field flex flex-col mb-5">
               <p className="text-[14px] inter text-primary_text mb-2">Email Address</p>
-              <TextField error={Boolean(errors.email)} {...register('email')} id="email" name="email" type="text" color="success" placeholder="Enter email address" focused />
-              {errors && <span className="text-[12px] inter text-error_text">{errors.email?.message}</span>}
+              <TextField
+                error={Boolean(errors.email)}
+                {...register('email')}
+                // onChange={() => {}}
+                id="email"
+                name="email"
+                type="text"
+                color="success"
+                placeholder="Enter email address"
+                focused
+              />
+              {errors && <span className="text-[12px] absolute -bottom-[18px] left-1 inter text-error_text">{errors.email?.message}</span>}
             </div>
           )}
 
           {fields?.includes(ELoginField.NAME) && (
-            <div className="field flex flex-col mb-4">
+            <div className="field flex flex-col mb-5">
               <p className="text-[14px] inter text-primary_text mb-2">Full Name</p>
-              <TextField error={Boolean(errors.name)} {...register('name')} id="name" name="name" type="text" color="success" placeholder="Enter full name" focused />
-              {errors && <span className="text-[12px] inter text-error_text">{errors.name?.message}</span>}
+              <TextField
+                error={Boolean(errors.name)}
+                {...register('name')}
+                // onChange={() => {}}
+                id="name"
+                name="name"
+                type="text"
+                color="success"
+                placeholder="Enter full name"
+                focused
+              />
+              {errors && <span className="text-[12px] absolute -bottom-[18px] left-1 inter text-error_text">{errors.name?.message}</span>}
             </div>
           )}
 
           {fields?.includes(ELoginField.PASSWORD) && (
-            <div className="field flex flex-col mb-4">
+            <div className="field flex flex-col mb-5">
               <p className="text-[14px] inter text-primary_text mb-2">Password</p>
               <div className="relative w-full">
                 <TextField
                   error={Boolean(errors.password)}
                   {...register('password')}
+                  // onChange={() => {}}
                   id="password"
                   name="password"
                   type={isPasswordVisible ? 'text' : 'password'}
                   color="success"
                   sx={{ width: '100%' }}
                   placeholder="Enter full password"
+                  autoComplete="no"
                   focused
                 />
-                {errors && <span className="text-[12px] inter text-error_text">{errors.password?.message}</span>}
+                {errors && <span className="text-[12px] absolute -bottom-[18px] left-1 inter text-error_text">{errors.password?.message}</span>}
 
                 <IconButton
                   onClick={() => setPasswordVisibility((state) => !state)}
@@ -178,12 +229,13 @@ const Authentication = ({ currType, onSubmit, onActionClk }: { currType: ELoginT
           )}
 
           {fields?.includes(ELoginField.NEW_PASSWORD) && (
-            <div className="field flex flex-col mb-4">
+            <div className="field flex flex-col mb-5">
               <p className="text-[14px] inter text-primary_text mb-2">New Password</p>
               <div className="relative w-full">
                 <TextField
                   error={Boolean(errors.new_password)}
                   {...register('new_password')}
+                  // onChange={() => {}}
                   id="new_password"
                   name="new_password"
                   type={isPasswordVisible ? 'text' : 'password'}
@@ -192,7 +244,7 @@ const Authentication = ({ currType, onSubmit, onActionClk }: { currType: ELoginT
                   placeholder="New password"
                   focused
                 />
-                {errors && <span className="text-[12px] inter text-error_text">{errors.new_password?.message}</span>}
+                {errors && <span className="text-[12px] absolute -bottom-[18px] left-1 inter text-error_text">{errors.new_password?.message}</span>}
                 <IconButton
                   onClick={() => setPasswordVisibility((state) => !state)}
                   className="absolute top-[50%] -translate-y-[50%] right-1"
@@ -205,12 +257,13 @@ const Authentication = ({ currType, onSubmit, onActionClk }: { currType: ELoginT
           )}
 
           {fields?.includes(ELoginField.CONFIRM_PASSWORD) && (
-            <div className="field flex flex-col mb-4">
+            <div className="field flex flex-col mb-5">
               <p className="text-[14px] inter text-primary_text mb-2">Confirm Password</p>
               <div className="relative w-full">
                 <TextField
                   error={Boolean(errors.confirm_password)}
                   {...register('confirm_password')}
+                  // onChange={() => {}}
                   id="confirm_password"
                   name="confirm_password"
                   type={isPasswordVisible ? 'text' : 'password'}
@@ -219,7 +272,7 @@ const Authentication = ({ currType, onSubmit, onActionClk }: { currType: ELoginT
                   placeholder="Confirm password"
                   focused
                 />
-                {errors && <span className="text-[12px] inter text-error_text">{errors.confirm_password?.message}</span>}
+                {errors && <span className="text-[12px] absolute -bottom-[18px] left-1 inter text-error_text">{errors.confirm_password?.message}</span>}
 
                 <IconButton
                   onClick={() => setPasswordVisibility((state) => !state)}
@@ -233,9 +286,11 @@ const Authentication = ({ currType, onSubmit, onActionClk }: { currType: ELoginT
           )}
 
           <div className="mt-5 px-10 w-full">
-            <Button onClick={handleFormSubmit} type="submit" fullWidth color="success" variant="contained">
-              {submitText}
-            </Button>
+            {render >= 0 && (
+              <Button onClick={handleFormSubmit} type="submit" fullWidth color="success" variant="contained">
+                {submitText}
+              </Button>
+            )}
           </div>
 
           {hasLoginType([ELoginType.SIGN_IN__email_pass]) && (
