@@ -4,6 +4,7 @@ import Date from '@/app/shared/Date';
 import { IDate } from '@/app/typings/common';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 
 const Home = () => {
   const workoutList = [
@@ -60,6 +61,18 @@ const Home = () => {
   function getSelectedDate(date: IDate): void {
     console.log(date);
   }
+
+  async function fetchWorkoutList() {
+    const data = await fetch('/api/fetch_workout_list', {
+      method: 'GET',
+      // body: JSON.stringify(data),
+    });
+    console.log(data);
+  }
+
+  useEffect(() => {
+    fetchWorkoutList();
+  }, []);
 
   return (
     <div className="p-global">

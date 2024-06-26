@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation';
 
 const Features = () => {
-  redirect('/achievments');
+  redirect('/home');
 };
 
 export default Features;
