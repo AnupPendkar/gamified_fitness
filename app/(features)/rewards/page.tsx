@@ -1,3 +1,5 @@
+'use client';
+
 import Date from '@/app/shared/Date';
 import { IDate } from '@/app/typings/common';
 

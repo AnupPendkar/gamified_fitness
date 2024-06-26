@@ -7,8 +7,6 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "run-migrations": "npx drizzle-kit generate:pg",
-    "migrate": "npx tsx -r ./lib/migrate.ts",
     "studio": "drizzle-kit studio --port 9005"
   },
   "dependencies": {

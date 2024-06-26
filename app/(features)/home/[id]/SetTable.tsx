@@ -73,7 +73,7 @@ const SetTable = () => {
           </TableHead>
           <TableBody>
             {datasource?.map((itm) => (
-              <TableRow>
+              <TableRow key={itm?.id}>
                 <TableCell align="center" width={'40%'}>
                   <span className="fsr-16 font-isb ">{itm?.id}</span>
                   {/* <span className="fsr-16 font-isb ">Set {itm?.id}</span> */}

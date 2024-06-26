@@ -139,15 +139,6 @@ const Authentication = ({ currType, onSubmit, onActionClk }: IAuthenticationProp
     }, 100);
   }, [currType]);
 
-  useEffect(() => {
-    // setTimeout(() => {
-    //   resetField('email');
-    //   resetField('password');
-    // }, 100);
-  }, []);
-
-  console.log('render', render);
-
   return (
     <div className="p-global">
       <form onSubmit={handleSubmit(_onSubmit)}>
