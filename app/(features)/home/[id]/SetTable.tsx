@@ -4,7 +4,7 @@ import { EIntensity } from '@/app/typings/common';
 import { Table, TableContainer, Paper, TableHead, TableRow, TableCell, TableBody, styled, Stack, Skeleton, Tooltip } from '@mui/material';
 import { useEffect, useState } from 'react';
 const SetTable = () => {
-  const [datasource, setDatasource] = useState([]);
+  const [datasource, setDatasource] = useState<any>([]);
 
   function getTableColumnNames(): Array<string> {
     return ['', 'bdreq', 'nfge', 'qwezsdfyr'];

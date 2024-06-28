@@ -6,9 +6,10 @@ import Stack from '@/app/shared/Stack';
 import { EAuthAction, ELoginType } from '@/app/typings/common';
 import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { handleCrendentialLogin, handleGitOAuthLogin, handleGoogleOAuthLogin } from './loginHandler';
 
 const Authenticate = () => {
-  const [loginType, setLoginType] = useState<ELoginType>();
+  const [loginType, setLoginType] = useState<ELoginType | null>();
   const stack = useRef<Stack>();
   const router = useRouter();
 
@@ -28,9 +29,11 @@ const Authenticate = () => {
         break;
 
       case EAuthAction.GOOGLE:
+        handleGoogleOAuthLogin();
         break;
 
       case EAuthAction.APPLE:
+        handleGitOAuthLogin();
         break;
 
       case EAuthAction.META:
@@ -43,41 +46,42 @@ const Authenticate = () => {
 
     switch (loginType) {
       case ELoginType.SIGN_IN__email_pass:
-        stack.current.push(ELoginType.SIGN_IN__email_pass);
+        stack.current?.push(ELoginType.SIGN_IN__email_pass);
+        handleCrendentialLogin(val?.email, val?.password);
         setLoginType(ELoginType.SIGN_IN__otp);
         break;
 
       case ELoginType.SIGN_IN__otp:
         router.push('/home');
         setLoginType(null);
-        stack.current.empty();
+        stack.current?.empty();
         break;
 
       case ELoginType.SIGN_UP__name_email:
-        stack.current.push(ELoginType.SIGN_UP__name_email);
+        stack.current?.push(ELoginType.SIGN_UP__name_email);
         setLoginType(ELoginType.SIGN_UP__pass);
         break;
 
       case ELoginType.SIGN_UP__pass:
         router.push('/home');
         setLoginType(null);
-        stack.current.empty();
+        stack.current?.empty();
         break;
 
       case ELoginType.FORGOT_PASS__email:
-        stack.current.push(ELoginType.FORGOT_PASS__email);
+        stack.current?.push(ELoginType.FORGOT_PASS__email);
         setLoginType(ELoginType.FORGOT_PASS__otp);
         break;
 
       case ELoginType.FORGOT_PASS__otp:
-        stack.current.push(ELoginType.FORGOT_PASS__otp);
+        stack.current?.push(ELoginType.FORGOT_PASS__otp);
         setLoginType(ELoginType.FORGOT_PASS__password);
         break;
 
       case ELoginType.FORGOT_PASS__password:
         router.push('/home');
         setLoginType(null);
-        stack.current.empty();
+        stack.current?.empty();
         break;
     }
   }

@@ -121,7 +121,6 @@ const Authentication = ({ currType, onSubmit, onActionClk }: IAuthenticationProp
   }
 
   function getFormValidity() {
-    console.log(!isPropEmpty(getValues()?.email), !isPropEmpty(getValues()?.password), getValues());
     switch (currType) {
       case ELoginType.SIGN_IN__email_pass:
         return !isPropEmpty(getValues()?.email) && !isPropEmpty(getValues()?.password);

@@ -10,12 +10,12 @@ import { DayCalendarSkeleton, PickersDay, LocalizationProvider, PickersDayProps 
 import Badge from '@mui/material/Badge';
 import { IDate } from '../typings/common';
 
-const Date = ({ getSelectedDate }: { getSelectedDate: (date: IDate) => void }) => {
+const Date = ({ getSelectedDate }: { getSelectedDate: (date: IDate | any) => void }) => {
   const dateContainerRef = useRef<HTMLDivElement>(null);
   const [openState, setOpenState] = useState(false);
   const [currMonthDates, setCurrMonthDates] = useState<IDate[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [selectedDate, setSelectedDate] = useState<IDate>(null);
+  const [selectedDate, setSelectedDate] = useState<IDate | null>(null);
   const [highlightedDays, setHighlightedDays] = useState<number[]>([1, 2, 15]);
   const requestAbortController = useRef<AbortController | null>(null);
   const initialValue = dayjs('2022-04-17');
@@ -72,7 +72,11 @@ const Date = ({ getSelectedDate }: { getSelectedDate: (date: IDate) => void }) =
     requestAbortController.current = controller;
   }
 
-  function setAllDatesWithinMonth(date: Date) {
+  function setAllDatesWithinMonth(date: Date | undefined) {
+    if (date === undefined) {
+      return;
+    }
+
     const dates = getAllDatesWithDays(date.getFullYear(), date.getMonth() + 1);
     setCurrMonthDates(dates);
   }
@@ -110,7 +114,7 @@ const Date = ({ getSelectedDate }: { getSelectedDate: (date: IDate) => void }) =
 
   useEffect(() => {
     const timoeut = setTimeout(() => {
-      let selector: Element;
+      let selector: any;
 
       const todaysDivSelector = dateContainerRef.current?.querySelector('.today');
       const selectedDivSelector = dateContainerRef.current?.querySelector('.selected_day');

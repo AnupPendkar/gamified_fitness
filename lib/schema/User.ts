@@ -9,6 +9,7 @@ export const users = pgTable('users', {
   email: varchar('email', { length: 100 }).unique(),
   xp: integer('xp').default(0),
   password: varchar('password', { length: 256 }).notNull(),
+  profileImg: varchar('profile_img'),
 });
 
 export const userRelations = relations(users, ({ one, many }) => ({
@@ -21,7 +22,6 @@ export const genderEnum = pgEnum('gender', ['Male', 'Female', 'Trans']);
 
 export const userDetails = pgTable('user_details', {
   phoneNo: varchar('phoneNo', { length: 20 }).notNull().unique(),
-  profileImg: varchar('profile_img'),
   gender: genderEnum('gender'),
   dob: date('date_of_birth'),
   userId: integer('user_id').references(() => users.id),
