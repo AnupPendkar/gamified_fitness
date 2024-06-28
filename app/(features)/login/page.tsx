@@ -6,12 +6,14 @@ import Stack from '@/app/shared/Stack';
 import { EAuthAction, ELoginType } from '@/app/typings/common';
 import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { handleCrendentialLogin, handleGitOAuthLogin, handleGoogleOAuthLogin } from './loginHandler';
+import { checkUserExists, getSession, handleCrendentialLogin, handleGitOAuthLogin, handleGoogleOAuthLogin, handleSignOut, userLogin, userRegister } from './serverFunc';
 
 const Authenticate = () => {
   const [loginType, setLoginType] = useState<ELoginType | null>();
   const stack = useRef<Stack>();
   const router = useRouter();
+  const emailRef = useRef<string>('');
+  const nameRef = useRef<string>('');
 
   function onActionClk(type: EAuthAction) {
     switch (type) {
@@ -41,14 +43,47 @@ const Authenticate = () => {
     }
   }
 
-  function onSubmit(val: TAuthDataSchema) {
-    console.log(val);
+  async function handleSignIn(email: string, password: string) {
+    const { status, message } = await userLogin(email, password);
 
+    if (status === 200) {
+      stack.current?.push(ELoginType.SIGN_IN__email_pass);
+      handleCrendentialLogin(email, password);
+      setLoginType(ELoginType.SIGN_IN__otp);
+    }
+  }
+
+  async function handleEmailExists(email: string, name: string) {
+    const { status, message } = await checkUserExists(email);
+
+    if (status === 403) {
+      emailRef.current = email;
+      nameRef.current = name;
+      stack.current?.push(ELoginType.SIGN_UP__name_email);
+      setLoginType(ELoginType.SIGN_UP__pass);
+    }
+  }
+
+  async function handleSignUp(password: string) {
+    const { status, message } = await userRegister(emailRef.current, password, nameRef.current);
+
+    if (status === 200) {
+      handleSignOut().then(() => {
+        console.log('logout');
+        handleCrendentialLogin(emailRef.current, password).then(() => {
+          console.log('login');
+          router.push('/home');
+          setLoginType(null);
+          stack.current?.empty();
+        });
+      });
+    }
+  }
+
+  function onSubmit(val: TAuthDataSchema) {
     switch (loginType) {
       case ELoginType.SIGN_IN__email_pass:
-        stack.current?.push(ELoginType.SIGN_IN__email_pass);
-        handleCrendentialLogin(val?.email, val?.password);
-        setLoginType(ELoginType.SIGN_IN__otp);
+        handleSignIn(val?.email, val?.password);
         break;
 
       case ELoginType.SIGN_IN__otp:
@@ -58,14 +93,11 @@ const Authenticate = () => {
         break;
 
       case ELoginType.SIGN_UP__name_email:
-        stack.current?.push(ELoginType.SIGN_UP__name_email);
-        setLoginType(ELoginType.SIGN_UP__pass);
+        handleEmailExists(val?.email, val?.name);
         break;
 
       case ELoginType.SIGN_UP__pass:
-        router.push('/home');
-        setLoginType(null);
-        stack.current?.empty();
+        handleSignUp(val?.password);
         break;
 
       case ELoginType.FORGOT_PASS__email:
@@ -87,6 +119,10 @@ const Authenticate = () => {
   }
 
   useEffect(() => {
+    getSession().then((res) => {
+      console.log(res);
+    });
+
     setLoginType(ELoginType.SIGN_IN__email_pass);
     // setLoginType(ELoginType.FORGOT_PASS__email);
 

@@ -5,7 +5,7 @@ import { IDate } from '@/app/typings/common';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
-import { getSession } from '../login/loginHandler';
+import { getSession } from './serverFunc';
 
 const Home = () => {
   const workoutList = [
@@ -75,7 +75,6 @@ const Home = () => {
     getSession().then((res) => {
       console.log(res);
     });
-
     fetchWorkoutList();
   }, []);
 

@@ -1,0 +1,79 @@
+'use server';
+import { isPropEmpty } from '@/app/utils/utilfunctions';
+import { auth, signIn, signOut } from '@/auth';
+import { db } from '@/lib/db';
+import { users } from '@/lib/schema/User';
+import { eq } from 'drizzle-orm';
+
+export async function handleGoogleOAuthLogin() {
+  const a = await signIn('google');
+}
+
+export async function handleGitOAuthLogin() {
+  const a = await signIn('github');
+}
+
+export async function handleSignOut() {
+  await signOut();
+}
+
+export async function handleCrendentialLogin(email: any, password: string) {
+  const user = await signIn('credentials', { email, password });
+}
+
+export async function getSession() {
+  const user = await auth();
+  return user;
+}
+
+export async function checkUserExists(email): Promise<{ status: number; message: string; user?: any }> {
+  const user = await db.select().from(users).where(eq(users?.email, email));
+
+  if (isPropEmpty(user)) {
+    return { status: 403, message: 'User not found.' };
+  } else {
+    return { status: 200, message: 'User exists!' };
+  }
+}
+
+export async function userLogin(email, password): Promise<{ status: number; message: string; user?: any }> {
+  try {
+    const [foundUsr, ...rest] = await db.select().from(users).where(eq(users.email, email));
+    if (!foundUsr) {
+      return { status: 403, message: 'Invalid users credentials' };
+    }
+
+    const isPasswordValid = password === foundUsr.password;
+
+    if (isPasswordValid) {
+      return { status: 200, message: 'Login successfull', user: foundUsr };
+    } else {
+      return { status: 403, message: 'Invalid Credentials' };
+    }
+  } catch (error) {
+    return { status: 500, message: 'Something went wrong' };
+  }
+}
+
+export async function userRegister(email, password, name): Promise<{ status: number; message: string; user?: any }> {
+  try {
+    const { status } = await checkUserExists(email);
+
+    if (status === 200) {
+      return { status: 422, message: 'Entered email already registered!' };
+    }
+
+    const [newUser, ...rest] = await db.insert(users).values({ password, fullName: name, email }).returning({
+      userId: users?.id,
+      name: users?.fullName,
+      email: users?.email,
+    });
+    if (newUser) {
+      return { status: 200, message: 'Registered successfully', user: newUser };
+    }
+  } catch (err) {
+    return { status: 500, message: 'Something went wrong' };
+  }
+
+  return { status: 500, message: 'Something went wrong' };
+}

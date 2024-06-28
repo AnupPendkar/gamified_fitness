@@ -3,13 +3,6 @@ import Google from 'next-auth/providers/google';
 import GitHub from 'next-auth/providers/github';
 import Credentials from 'next-auth/providers/credentials';
 
-interface ExtendedUser {
-  email: string;
-  password: string;
-  id: string;
-  name: string;
-}
-
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
     Google,
@@ -35,16 +28,12 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   ],
 
   callbacks: {
-    redirect: ({ url, baseUrl }) => {
-      return '/redirect';
-    },
     jwt: async ({ token, user, account }) => {
       if (user) {
-        const extendedUser = user as ExtendedUser;
+        const extendedUser = user;
         token.id = extendedUser.id;
         token.name = extendedUser.name;
         token.email = extendedUser.email;
-        token.password = extendedUser.password;
         if (account?.provider) token.provider = account.provider;
       }
 
@@ -55,7 +44,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         id: token.id,
         name: token.name,
         email: token.email,
-        password: token.password,
         provider: token.provider,
       });
 
@@ -69,7 +57,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           if (!email) {
             throw new AuthError('Failed to sign in');
           }
-          return true;
+
+          return '/redirect';
         } else if (account?.provider === 'credentials') {
           return true;
         }
