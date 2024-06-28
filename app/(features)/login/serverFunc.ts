@@ -6,11 +6,11 @@ import { users } from '@/lib/schema/User';
 import { eq } from 'drizzle-orm';
 
 export async function handleGoogleOAuthLogin() {
-  const a = await signIn('google');
+  await signIn('google');
 }
 
 export async function handleGitOAuthLogin() {
-  const a = await signIn('github');
+  await signIn('github');
 }
 
 export async function handleSignOut() {
