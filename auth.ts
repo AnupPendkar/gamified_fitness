@@ -1,18 +1,20 @@
 import NextAuth, { AuthError } from 'next-auth';
 import Google from 'next-auth/providers/google';
-import GitHub from 'next-auth/providers/github';
-import Credentials from 'next-auth/providers/credentials';
+import CredentialsProvider from 'next-auth/providers/credentials';
+import FacebookProvider from 'next-auth/providers/facebook';
+import AppleProvider from 'next-auth/providers/apple';
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
     Google,
-    GitHub,
-    Credentials({
+    FacebookProvider,
+    AppleProvider,
+    CredentialsProvider({
       credentials: {
-        email: {},
-        password: {},
-        id: {},
-        name: {},
+        email: { label: 'Email', type: 'text' },
+        password: { label: 'Password', type: 'password' },
+        id: { label: 'ID', type: 'text' },
+        name: { label: 'Name', type: 'text' },
       },
       authorize: async ({ email, id, name, password }) => {
         const data = {
@@ -30,13 +32,11 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   callbacks: {
     jwt: async ({ token, user, account }) => {
       if (user) {
-        const extendedUser = user;
-        token.id = extendedUser.id;
-        token.name = extendedUser.name;
-        token.email = extendedUser.email;
+        token.id = user.id;
+        token.name = user.name;
+        token.email = user.email;
         if (account?.provider) token.provider = account.provider;
       }
-
       return token;
     },
     session: async ({ session, token, user }: any) => {
@@ -49,23 +49,24 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
       return session;
     },
-    signIn: async ({ user: userProvider, account }) => {
+    signIn: async ({ user, account }: any) => {
       try {
-        if (account?.provider === 'google') {
-          const { image, name, email } = userProvider;
-
-          if (!email) {
-            throw new AuthError('Failed to sign in');
+        if (['google', 'facebook', 'apple', 'github'].includes(account?.provider)) {
+          if (!user.email) {
+            throw new AuthError('Failed to sign in: email is missing');
           }
-
-          return '/redirect';
-        } else if (account?.provider === 'credentials') {
+          return true;
+        } else if (account.provider === 'credentials') {
           return true;
         }
         return false;
       } catch (error) {
+        console.error('SignIn error:', error);
         throw new AuthError('Failed to sign in');
       }
+    },
+    redirect: async ({ url, baseUrl }) => {
+      return `/redirect`;
     },
   },
 });

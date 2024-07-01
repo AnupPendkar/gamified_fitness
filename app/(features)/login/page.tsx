@@ -6,7 +6,17 @@ import Stack from '@/app/shared/Stack';
 import { EAuthAction, ELoginType } from '@/app/typings/common';
 import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { checkUserExists, getSession, handleCrendentialLogin, handleGitOAuthLogin, handleGoogleOAuthLogin, handleSignOut, userLogin, userRegister } from './serverFunc';
+import {
+  checkUserExists,
+  getSession,
+  handleAppleOAuthLogin,
+  handleCrendentialLogin,
+  handleMetaOAuthLogin,
+  handleGoogleOAuthLogin,
+  handleSignOut,
+  userLogin,
+  userRegister,
+} from './serverFunc';
 
 const Authenticate = () => {
   const [loginType, setLoginType] = useState<ELoginType | null>();
@@ -31,14 +41,24 @@ const Authenticate = () => {
         break;
 
       case EAuthAction.GOOGLE:
-        handleGoogleOAuthLogin();
+        handleSignOut().then(() => {
+          console.log('logout');
+          handleGoogleOAuthLogin();
+        });
         break;
 
       case EAuthAction.APPLE:
-        handleGitOAuthLogin();
+        handleSignOut().then(() => {
+          console.log('logout');
+          handleAppleOAuthLogin();
+        });
         break;
 
       case EAuthAction.META:
+        handleSignOut().then(() => {
+          console.log('logout');
+          handleMetaOAuthLogin();
+        });
         break;
     }
   }
@@ -71,7 +91,6 @@ const Authenticate = () => {
       handleSignOut().then(() => {
         console.log('logout');
         handleCrendentialLogin(emailRef.current, password).then(() => {
-          console.log('login');
           router.push('/home');
           setLoginType(null);
           stack.current?.empty();

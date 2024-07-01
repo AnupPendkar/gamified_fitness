@@ -9,8 +9,12 @@ export async function handleGoogleOAuthLogin() {
   await signIn('google');
 }
 
-export async function handleGitOAuthLogin() {
-  await signIn('github');
+export async function handleAppleOAuthLogin() {
+  await signIn('apple');
+}
+
+export async function handleMetaOAuthLogin() {
+  await signIn('facebook');
 }
 
 export async function handleSignOut() {
