@@ -9,6 +9,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DayCalendarSkeleton, PickersDay, LocalizationProvider, PickersDayProps } from '@mui/x-date-pickers';
 import Badge from '@mui/material/Badge';
 import { IDate } from '../typings/common';
+import { cloneDeep } from 'lodash';
 
 const Date = ({ getSelectedDate }: { getSelectedDate: (date: IDate | any) => void }) => {
   const dateContainerRef = useRef<HTMLDivElement>(null);
@@ -21,7 +22,7 @@ const Date = ({ getSelectedDate }: { getSelectedDate: (date: IDate | any) => voi
   const initialValue = dayjs('2022-04-17');
 
   function handleDateClk(itm: IDate) {
-    setSelectedDate({ ...itm });
+    setSelectedDate({ ...itm, dateObj: cloneDeep(itm?.dateObj) });
   }
 
   function handleDateChange(date: any) {

@@ -1,6 +1,6 @@
 {
-  "id": "c2ef665e-7f57-429e-b30d-f8f570eac043",
-  "prevId": "6bec77e5-560c-42fc-b15f-81175fcaf4d3",
+  "id": "fc3caf2b-c62b-489a-bc41-7e7ad28a7fc1",
+  "prevId": "d7927222-69bb-4c72-a8d4-648f38dbda6e",
   "version": "5",
   "dialect": "pg",
   "tables": {
@@ -53,6 +53,48 @@
             "id"
           ],
           "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "session": {
+      "name": "session",
+      "schema": "",
+      "columns": {
+        "sessionToken": {
+          "name": "sessionToken",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "userId": {
+          "name": "userId",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "expires": {
+          "name": "expires",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "session_userId_users_id_fk": {
+          "name": "session_userId_users_id_fk",
+          "tableFrom": "session",
+          "tableTo": "users",
+          "columnsFrom": [
+            "userId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
           "onUpdate": "no action"
         }
       },
@@ -170,6 +212,42 @@
         }
       }
     },
+    "verificationToken": {
+      "name": "verificationToken",
+      "schema": "",
+      "columns": {
+        "identifier": {
+          "name": "identifier",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "token": {
+          "name": "token",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "expires": {
+          "name": "expires",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "verificationToken_identifier_token_pk": {
+          "name": "verificationToken_identifier_token_pk",
+          "columns": [
+            "identifier",
+            "token"
+          ]
+        }
+      },
+      "uniqueConstraints": {}
+    },
     "exercise": {
       "name": "exercise",
       "schema": "",
@@ -180,18 +258,18 @@
           "primaryKey": true,
           "notNull": true
         },
-        "name": {
-          "name": "name",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
         "sets": {
           "name": "sets",
           "type": "integer",
           "primaryKey": false,
           "notNull": false,
           "default": 3
+        },
+        "exercise_id": {
+          "name": "exercise_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
         },
         "workout_id": {
           "name": "workout_id",
@@ -219,6 +297,40 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
+    "exercise_list": {
+      "name": "exercise_list",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "desc": {
+          "name": "desc",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "target_muscles": {
+          "name": "target_muscles",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
     "set": {
       "name": "set",
       "schema": "",
@@ -229,12 +341,30 @@
           "primaryKey": true,
           "notNull": true
         },
+        "set_no": {
+          "name": "set_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
         "reps": {
           "name": "reps",
           "type": "integer",
           "primaryKey": false,
           "notNull": false,
           "default": 12
+        },
+        "intensity": {
+          "name": "intensity",
+          "type": "intensity",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "weight": {
+          "name": "weight",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
         },
         "completed_reps": {
           "name": "completed_reps",
@@ -328,11 +458,19 @@
         "Trans": "Trans"
       }
     },
+    "intensity": {
+      "name": "intensity",
+      "values": {
+        "1": "1",
+        "2": "2",
+        "3": "3"
+      }
+    },
     "status": {
       "name": "status",
       "values": {
-        "complete": "complete",
-        "inComplete": "inComplete"
+        "0": "0",
+        "1": "1"
       }
     }
   },

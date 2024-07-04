@@ -2,7 +2,7 @@
 import { isPropEmpty } from '@/app/utils/utilfunctions';
 import { auth, signIn } from '@/auth';
 import { db } from '@/lib/db';
-import { users } from '@/lib/schema/User';
+import { sessions, users } from '@/lib/schema/User';
 import { eq } from 'drizzle-orm';
 
 export async function handleCrendentialLogin(email: any, password: string) {
@@ -20,8 +20,16 @@ export async function checkUserExists(email): Promise<{ status: number; message:
   if (isPropEmpty(user)) {
     return { status: 403, message: 'User not found.' };
   } else {
-    return { status: 200, message: 'User exists!' };
+    return { status: 200, message: 'User exists!', user: user?.[0] };
   }
+}
+
+export async function setSession(userId, sessionToken, expiresAt) {
+  await db.insert(sessions).values({
+    userId,
+    sessionToken,
+    expires: new Date(expiresAt),
+  });
 }
 
 export async function userRegister(email, password, name): Promise<{ status: number; message: string; user?: any }> {

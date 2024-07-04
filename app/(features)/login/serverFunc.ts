@@ -2,7 +2,7 @@
 import { isPropEmpty } from '@/app/utils/utilfunctions';
 import { auth, signIn, signOut } from '@/auth';
 import { db } from '@/lib/db';
-import { users } from '@/lib/schema/User';
+import { sessions, users } from '@/lib/schema/User';
 import { eq } from 'drizzle-orm';
 
 export async function handleGoogleOAuthLogin() {
@@ -23,6 +23,7 @@ export async function handleSignOut() {
 
 export async function handleCrendentialLogin(email: any, password: string) {
   const user = await signIn('credentials', { email, password });
+  return user;
 }
 
 export async function getSession() {
@@ -68,7 +69,7 @@ export async function userRegister(email, password, name): Promise<{ status: num
     }
 
     const [newUser, ...rest] = await db.insert(users).values({ password, fullName: name, email }).returning({
-      userId: users?.id,
+      id: users?.id,
       name: users?.fullName,
       email: users?.email,
     });

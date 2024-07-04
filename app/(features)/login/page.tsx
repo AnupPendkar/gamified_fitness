@@ -42,21 +42,18 @@ const Authenticate = () => {
 
       case EAuthAction.GOOGLE:
         handleSignOut().then(() => {
-          console.log('logout');
           handleGoogleOAuthLogin();
         });
         break;
 
       case EAuthAction.APPLE:
         handleSignOut().then(() => {
-          console.log('logout');
           handleAppleOAuthLogin();
         });
         break;
 
       case EAuthAction.META:
         handleSignOut().then(() => {
-          console.log('logout');
           handleMetaOAuthLogin();
         });
         break;
@@ -64,12 +61,15 @@ const Authenticate = () => {
   }
 
   async function handleSignIn(email: string, password: string) {
-    const { status, message } = await userLogin(email, password);
+    const { status, user } = await userLogin(email, password);
 
     if (status === 200) {
-      stack.current?.push(ELoginType.SIGN_IN__email_pass);
-      handleCrendentialLogin(email, password);
-      setLoginType(ELoginType.SIGN_IN__otp);
+      handleSignOut().then(() => {
+        handleCrendentialLogin(email, password).then(async (res) => {
+          stack.current?.push(ELoginType.SIGN_IN__email_pass);
+          setLoginType(ELoginType.SIGN_IN__otp);
+        });
+      });
     }
   }
 
@@ -85,15 +85,13 @@ const Authenticate = () => {
   }
 
   async function handleSignUp(password: string) {
-    const { status, message } = await userRegister(emailRef.current, password, nameRef.current);
+    const { status, user } = await userRegister(emailRef.current, password, nameRef.current);
 
     if (status === 200) {
       handleSignOut().then(() => {
-        console.log('logout');
-        handleCrendentialLogin(emailRef.current, password).then(() => {
-          router.push('/home');
-          setLoginType(null);
+        handleCrendentialLogin(emailRef.current, password).then(async () => {
           stack.current?.empty();
+          setLoginType(null);
         });
       });
     }
@@ -138,17 +136,10 @@ const Authenticate = () => {
   }
 
   useEffect(() => {
-    getSession().then((res) => {
-      console.log(res);
-    });
-
     setLoginType(ELoginType.SIGN_IN__email_pass);
-    // setLoginType(ELoginType.FORGOT_PASS__email);
 
     stack.current = new Stack();
   }, []);
-
-  console.log(loginType);
 
   return (
     <div className="p-global pt-4">

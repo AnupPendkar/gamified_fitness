@@ -1,5 +1,6 @@
 import dayjs from 'dayjs';
 import { IDate } from '../typings/common';
+import { cloneDeep } from 'lodash';
 
 /**
  * Utility function to format epoch time to human-readable format
@@ -32,17 +33,15 @@ function getTodaysDate(): IDate {
   };
 }
 
-
-// month index starts from 0 not 1.
 function getAllDatesWithDays(year: number, month: number): IDate[] {
   const daysInWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
   let datesWithDays: IDate[] = [];
 
-  let date = new Date(year, month - 1, 1);  // month - 1 because JavaScript months are 0-indexed
+  let date = new Date(year, month - 1, 1); // month - 1 because JavaScript months are 0-indexed
 
   let daysInMonth = new Date(year, month, 0).getDate(); // Correctly calculate days in month
 
-  for (let day = 1; day <= daysInMonth; day++) {  // Loop should include the last day
+  for (let day = 1; day <= daysInMonth; day++) {
     date.setDate(day);
     let dayOfWeek = daysInWeek[date.getDay()];
 
@@ -51,11 +50,23 @@ function getAllDatesWithDays(year: number, month: number): IDate[] {
       date: day,
       month,
       year,
-      dateObj: new Date(),
+      dateObj: new Date(Date.UTC(year, month - 1, day, 0, 0, 0, 0)),
     });
   }
 
   return datesWithDays;
 }
 
-export { getFormatedTime, getTodaysDate, getAllDatesWithDays };
+function getStartAndEndOfByDate(date: Date) {
+  const now = new Date(date);
+
+  const startOfDay = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), 0, 0, 0, 0));
+  const endOfDay = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), 23, 59, 59, 999));
+
+  return {
+    startOfDay,
+    endOfDay,
+  };
+}
+
+export { getFormatedTime, getTodaysDate, getAllDatesWithDays, getStartAndEndOfByDate };

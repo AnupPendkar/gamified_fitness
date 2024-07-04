@@ -1,10 +1,27 @@
+'use client';
+
 import Back from '@/app/shared/Back';
 import Image from 'next/image';
 import SetTable from './SetTable';
+import { useRouter } from 'next/navigation';
+import { useContext } from '../../context';
+import { useEffect, useState } from 'react';
+import { isPropEmpty } from '@/app/utils/utilfunctions';
 
-const page = ({ params }) => {
-  console.log(params);
-  const titles = ['sdf', 'vdtr', 'oweur', 'voweir', 'vqweor', 'qowie', 'zperope'];
+const page = () => {
+  const [target, setTarget] = useState<string[]>([]);
+  const { exercise } = useContext();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (isPropEmpty(exercise)) {
+      router.push('/home');
+    }
+
+    const titles = ['sdf', 'vdtr', 'oweur', 'voweir', 'vqweor', 'qowie', 'zperope'];
+
+    setTarget(titles);
+  }, []);
 
   return (
     <div className="p-global grid overflow-hidden h-full" style={{ gridTemplate: 'max-content minmax(0, 1fr) / 1fr' }}>
@@ -17,16 +34,16 @@ const page = ({ params }) => {
 
         <div className="leading-7 mb-5">
           <span className="text-primary_text font-isb mr-2">Title:</span>
-          {titles?.map((itm, idx) => (
-            <>
+          {target?.map((itm, idx) => (
+            <span key={idx}>
               <span className={`${idx === 0 && 'hidden'} text-secondary_text`}> | </span>
               <span className="text-secondary_text">{itm}</span>
-            </>
+            </span>
           ))}
         </div>
 
         <div className="grid h-full">
-          <SetTable />
+          <SetTable sets={exercise?.sets} />
         </div>
       </div>
     </div>

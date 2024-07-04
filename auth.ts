@@ -3,6 +3,7 @@ import Google from 'next-auth/providers/google';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import FacebookProvider from 'next-auth/providers/facebook';
 import AppleProvider from 'next-auth/providers/apple';
+import Nodemailer from 'next-auth/providers/nodemailer';
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
@@ -51,7 +52,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     },
     signIn: async ({ user, account }: any) => {
       try {
-        if (['google', 'facebook', 'apple', 'github'].includes(account?.provider)) {
+        if (['google', 'facebook', 'apple'].includes(account?.provider)) {
           if (!user.email) {
             throw new AuthError('Failed to sign in: email is missing');
           }
