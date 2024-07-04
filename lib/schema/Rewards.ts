@@ -2,17 +2,17 @@ import { relations } from 'drizzle-orm';
 import { serial, pgTable, text, integer, timestamp } from 'drizzle-orm/pg-core';
 import { users } from './User';
 
-export const achievements = pgTable('achievements', {
+export const rewards = pgTable('rewards', {
   id: serial('id').primaryKey(),
   createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
-  task: text('task').notNull(),
+  task: text('task'),
   xp: integer('xp'),
   userId: integer('user_id').references(() => users.id),
 });
 
-export const achievementRelations = relations(achievements, ({ one }) => ({
+export const rewardsRelations = relations(rewards, ({ one }) => ({
   user: one(users, {
-    fields: [achievements?.userId],
+    fields: [rewards?.userId],
     references: [users?.id],
   }),
 }));

@@ -1,11 +1,11 @@
 {
-  "id": "90070c70-bec9-424b-99fb-b2344ce74dda",
+  "id": "932496d6-f342-41fc-afa7-0b9e1fb55be7",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "5",
   "dialect": "pg",
   "tables": {
-    "achievements": {
-      "name": "achievements",
+    "rewards": {
+      "name": "rewards",
       "schema": "",
       "columns": {
         "id": {
@@ -25,7 +25,7 @@
           "name": "task",
           "type": "text",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         },
         "xp": {
           "name": "xp",
@@ -42,9 +42,9 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "achievements_user_id_users_id_fk": {
-          "name": "achievements_user_id_users_id_fk",
-          "tableFrom": "achievements",
+        "rewards_user_id_users_id_fk": {
+          "name": "rewards_user_id_users_id_fk",
+          "tableFrom": "rewards",
           "tableTo": "users",
           "columnsFrom": [
             "user_id"
@@ -341,12 +341,30 @@
           "primaryKey": true,
           "notNull": true
         },
+        "set_no": {
+          "name": "set_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
         "reps": {
           "name": "reps",
           "type": "integer",
           "primaryKey": false,
           "notNull": false,
           "default": 12
+        },
+        "intensity": {
+          "name": "intensity",
+          "type": "intensity",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "weight": {
+          "name": "weight",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
         },
         "completed_reps": {
           "name": "completed_reps",
@@ -440,11 +458,19 @@
         "Trans": "Trans"
       }
     },
+    "intensity": {
+      "name": "intensity",
+      "values": {
+        "1": "1",
+        "2": "2",
+        "3": "3"
+      }
+    },
     "status": {
       "name": "status",
       "values": {
-        "complete": "complete",
-        "inComplete": "inComplete"
+        "0": "0",
+        "1": "1"
       }
     }
   },

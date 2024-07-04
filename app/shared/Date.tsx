@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { getAllDatesWithDays, getTodaysDate } from '../utils/timeFormatUtils';
+import { areTwoDatesEqual, getAllDatesWithDays, getTodaysDate } from '../utils/timeFormatUtils';
 import Image from 'next/image';
 import dayjs, { Dayjs } from 'dayjs';
 import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
@@ -11,7 +11,7 @@ import Badge from '@mui/material/Badge';
 import { IDate } from '../typings/common';
 import { cloneDeep } from 'lodash';
 
-const Date = ({ getSelectedDate }: { getSelectedDate: (date: IDate | any) => void }) => {
+const Date = ({ getSelectedDate, defaultDate }: { getSelectedDate: (date: IDate | any) => void; defaultDate?: Date }) => {
   const dateContainerRef = useRef<HTMLDivElement>(null);
   const [openState, setOpenState] = useState(false);
   const [currMonthDates, setCurrMonthDates] = useState<IDate[]>([]);
@@ -83,6 +83,7 @@ const Date = ({ getSelectedDate }: { getSelectedDate: (date: IDate | any) => voi
   }
 
   function handleMonthChange(date: Dayjs) {
+    console.log('month changes', date);
     if (requestAbortController.current) {
       requestAbortController.current.abort();
     }
@@ -140,6 +141,13 @@ const Date = ({ getSelectedDate }: { getSelectedDate: (date: IDate | any) => voi
 
     return () => clearTimeout(timoeut);
   }, [selectedDate]);
+
+  useEffect(() => {
+    if (defaultDate) {
+      handleMonthChange(dayjs(defaultDate));
+      handleDateChange(dayjs(defaultDate));
+    }
+  }, [defaultDate]);
 
   return (
     <div>

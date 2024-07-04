@@ -4,22 +4,26 @@ import Date from '@/app/shared/Date';
 import { IDate } from '@/app/typings/common';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { checkUserExists, getSession, getWorkout } from './serverFunc';
 import { getTodaysDate } from '@/app/utils/timeFormatUtils';
 import { useContext } from '../context';
 
 const Home = () => {
   const [workout, setWorkout] = useState<any[]>([]);
-  const { setExerciseFunc } = useContext();
+  const { setExerciseFunc, setCurrSelectedDate, selectedDate } = useContext();
+  const dateRef = useRef<Date>();
   const router = useRouter();
 
   function handleWorkoutClk(itm) {
     setExerciseFunc(itm);
+    setCurrSelectedDate(dateRef.current as Date);
+
     router.push(`/home/${itm?.id}`);
   }
 
   function getSelectedDate(date: IDate): void {
+    dateRef.current = date?.dateObj;
     fetchWorkoutList(date?.dateObj as Date);
   }
 
@@ -52,7 +56,7 @@ const Home = () => {
 
   return (
     <div className="p-global">
-      <Date getSelectedDate={getSelectedDate} />
+      <Date getSelectedDate={getSelectedDate} defaultDate={selectedDate} />
 
       <div className="flex flex-wrap items-center justify-between">
         {workout?.map((itm) => (

@@ -1,6 +1,6 @@
 import { relations } from 'drizzle-orm';
 import { date, serial, pgEnum, pgTable, text, varchar, integer, timestamp, primaryKey } from 'drizzle-orm/pg-core';
-import { achievements } from './Achievements';
+import { rewards } from './Rewards';
 import { workout } from './Workout';
 import type { AdapterAccount } from '@auth/core/adapters';
 
@@ -14,7 +14,7 @@ export const users = pgTable('users', {
 });
 
 export const userRelations = relations(users, ({ one, many }) => ({
-  achievements: many(achievements),
+  rewards: many(rewards),
   workouts: many(workout),
   userDetails: one(userDetails),
   sessions: many(sessions),

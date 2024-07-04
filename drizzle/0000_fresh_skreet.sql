@@ -5,15 +5,21 @@ EXCEPTION
 END $$;
 --> statement-breakpoint
 DO $$ BEGIN
- CREATE TYPE "status" AS ENUM('complete', 'inComplete');
+ CREATE TYPE "intensity" AS ENUM('1', '2', '3');
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
 --> statement-breakpoint
-CREATE TABLE IF NOT EXISTS "achievements" (
+DO $$ BEGIN
+ CREATE TYPE "status" AS ENUM('0', '1');
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+CREATE TABLE IF NOT EXISTS "rewards" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
-	"task" text NOT NULL,
+	"task" text,
 	"xp" integer,
 	"user_id" integer
 );
@@ -65,7 +71,10 @@ CREATE TABLE IF NOT EXISTS "exercise_list" (
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "set" (
 	"id" serial PRIMARY KEY NOT NULL,
+	"set_no" integer,
 	"reps" integer DEFAULT 12,
+	"intensity" "intensity",
+	"weight" integer,
 	"completed_reps" integer DEFAULT 0,
 	"exercise_id" integer
 );
@@ -78,7 +87,7 @@ CREATE TABLE IF NOT EXISTS "workout" (
 );
 --> statement-breakpoint
 DO $$ BEGIN
- ALTER TABLE "achievements" ADD CONSTRAINT "achievements_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE no action ON UPDATE no action;
+ ALTER TABLE "rewards" ADD CONSTRAINT "rewards_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE no action ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;

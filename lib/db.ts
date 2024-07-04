@@ -4,9 +4,9 @@ import { sql } from '@vercel/postgres';
 import { sql as _sql } from 'drizzle-orm';
 import * as userSchema from './schema/User';
 import * as workoutSchema from './schema/Workout';
-import * as achievementsSchema from './schema/Achievements';
+import * as rewardsSchema from './schema/Rewards';
 
-export const db = drizzle(sql, { schema: { ...userSchema, ...achievementsSchema, ...workoutSchema } });
+export const db = drizzle(sql, { schema: { ...userSchema, ...rewardsSchema, ...workoutSchema } });
 
 // clearDb();
 async function clearDb(): Promise<void> {
