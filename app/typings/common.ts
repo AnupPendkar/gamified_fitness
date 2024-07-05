@@ -42,3 +42,17 @@ export enum ELoginField {
   CONFIRM_PASSWORD = 5,
   OTP = 6,
 }
+
+export interface IUser {
+  id: number;
+  fullName: string;
+  email: string;
+  xp: number;
+  profileImg: string;
+}
+export interface IRewards {
+  id: number;
+  src: string;
+  name: string;
+  xp: number;
+}
