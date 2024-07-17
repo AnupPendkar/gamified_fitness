@@ -2,13 +2,22 @@ import { relations } from 'drizzle-orm';
 import { serial, pgTable, integer, timestamp, pgEnum, text } from 'drizzle-orm/pg-core';
 import { users } from './User';
 
+// b: 1
+// c: 2
+// l: 3
+// t: 4
+// b: 5
+// s: 6
+
 export const statusEnum = pgEnum('status', ['1', '0']);
 export const intensityEnum = pgEnum('intensity', ['1', '2', '3']);
+export const splitEnum = pgEnum('split', ['1', '2', '3', '4', '5', '6']);
 
 export const workout = pgTable('workout', {
   id: serial('id').primaryKey(),
   createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
   status: statusEnum('status'),
+  split: splitEnum('split').array(),
   userId: integer('user_id').references(() => users.id),
 });
 
@@ -22,9 +31,9 @@ export const workoutRelations = relations(workout, ({ one, many }) => ({
 
 export const exercise = pgTable('exercise', {
   id: serial('id').primaryKey(),
-  sets: integer('sets').default(3),
+  set: integer('set').default(3),
   exerciseId: integer('exercise_id').notNull(),
-  workoutId: integer('workout_id').references(() => workout.id),
+  workoutId: integer('workout_id').references(() => workout.id, { onDelete: 'cascade' }),
 });
 
 export const exerciseRelations = relations(exercise, ({ one, many }) => ({
@@ -43,7 +52,7 @@ export const set = pgTable('set', {
   weight: integer('weight'),
   completedReps: integer('completed_reps').default(0),
 
-  exerciseId: integer('exercise_id').references(() => exercise.id),
+  exerciseId: integer('exercise_id').references(() => exercise.id, { onDelete: 'cascade' }),
 });
 
 export const setRelations = relations(set, ({ one }) => ({

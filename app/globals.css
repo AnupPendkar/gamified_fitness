@@ -1,39 +1,19 @@
 @import '/css/_variable.css';
 @import '/css/_scrollbar.css';
+@import '/css/_loader.css';
 @import '/css/_fonts.css';
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --color-primary: #151515;
-  --color-secondary: #202023;
-  --color-ternary: #0f151b;
-
-  --color-success: #baf247;
-
-  --color-background: #151515;
-
-  --color-text-primary: #dddde1;
-  --color-text-error: #f52424;
-  --color-text-secondary: #81809e;
-
-  --color-text-primary-dark: #191919;
-  --color-text-secondary-dark: #3a3945;
-
-  --global-padding: 0 20px;
-}
-
 @layer utilities {
   .glow {
     @apply transition-shadow duration-300;
     box-shadow: 0 0 10px #baf247;
-    /* box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); */
   }
 
   .hover\:glow:hover {
-    /* box-shadow: 0 0 10px #baf247; */
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   }
 }

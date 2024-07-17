@@ -10,6 +10,7 @@ import { DayCalendarSkeleton, PickersDay, LocalizationProvider, PickersDayProps 
 import Badge from '@mui/material/Badge';
 import { IDate } from '../typings/common';
 import { cloneDeep } from 'lodash';
+import { fetchActiveDays } from './serverFunc';
 
 const Date = ({ getSelectedDate, defaultDate }: { getSelectedDate: (date: IDate | any) => void; defaultDate?: Date }) => {
   const dateContainerRef = useRef<HTMLDivElement>(null);
@@ -37,17 +38,19 @@ const Date = ({ getSelectedDate, defaultDate }: { getSelectedDate: (date: IDate 
     setSelectedDate(_date);
   }
 
-  function getRandomNumber(min: number, max: number) {
-    return Math.round(Math.random() * (max - min) + min);
-  }
-
-  function fakeFetch(date: Dayjs, { signal }: { signal: AbortSignal }) {
+  function getActiveDays(date: Dayjs, { signal }: { signal: AbortSignal }) {
     return new Promise<{ daysToHighlight: number[] }>((resolve, reject) => {
-      const timeout = setTimeout(() => {
-        const daysInMonth = date.daysInMonth();
-        const daysToHighlight = [1, 2, 3].map(() => getRandomNumber(1, daysInMonth));
+      if (!selectedDate) {
+        return;
+      }
 
-        resolve({ daysToHighlight });
+      const timeout = setTimeout(async () => {
+        const activeDays = await fetchActiveDays(selectedDate?.dateObj as Date);
+        const daysToHighlight = activeDays?.map((days) => days?.createdAt?.getDate());
+
+        if (daysToHighlight) {
+          resolve({ daysToHighlight });
+        }
       }, 500);
 
       signal.onabort = () => {
@@ -59,7 +62,8 @@ const Date = ({ getSelectedDate, defaultDate }: { getSelectedDate: (date: IDate 
 
   function fetchHighlightedDays(date: Dayjs) {
     const controller = new AbortController();
-    fakeFetch(date, { signal: controller.signal })
+
+    getActiveDays(date, { signal: controller.signal })
       .then(({ daysToHighlight }) => {
         setHighlightedDays(daysToHighlight);
         setIsLoading(false);
@@ -83,7 +87,6 @@ const Date = ({ getSelectedDate, defaultDate }: { getSelectedDate: (date: IDate 
   }
 
   function handleMonthChange(date: Dayjs) {
-    console.log('month changes', date);
     if (requestAbortController.current) {
       requestAbortController.current.abort();
     }
@@ -109,8 +112,6 @@ const Date = ({ getSelectedDate, defaultDate }: { getSelectedDate: (date: IDate 
     setAllDatesWithinMonth(getTodaysDate().dateObj);
     setSelectedDate({ ...getTodaysDate() });
 
-    fetchHighlightedDays(initialValue);
-
     return () => requestAbortController.current?.abort();
   }, []);
 
@@ -135,6 +136,8 @@ const Date = ({ getSelectedDate, defaultDate }: { getSelectedDate: (date: IDate 
           selector.scrollIntoView({ behavior: 'instant', inline: 'start', block: 'start' });
         }
       }
+
+      fetchHighlightedDays(initialValue);
     }, 100);
 
     getSelectedDate(selectedDate);
@@ -181,7 +184,9 @@ const Date = ({ getSelectedDate, defaultDate }: { getSelectedDate: (date: IDate 
               isToday(itm) ? 'today bg-success text-primary_text_dark' : isSelected(itm) ? 'selected_day bg-ternary border-solid border-2 border-success' : 'bg-secondary'
             }`}
           >
-            {highlightedDays?.includes(itm?.date) && !isSelected(itm) && <Image className="absolute top-0 right-0" src={'/images/completed_dot.svg'} alt="" width={7} height={7} />}
+            {highlightedDays?.includes(itm?.date) && !isSelected(itm) && (
+              <Image className="absolute top-0 right-0" src={'/images/completed_dot.svg'} alt="Active" width={7} height={7} />
+            )}
             <p className="font-isb">{itm.date}</p>
             <p>{itm.day}</p>
           </div>
@@ -199,7 +204,7 @@ function ActiveDays(props: PickersDayProps<Dayjs> & { highlightedDays?: number[]
   const isSelected = !outsideCurrentMonth && highlightedDays.indexOf(day.date()) >= 0;
 
   return (
-    <Badge key={day.toString()} overlap="circular" badgeContent={isSelected ? <Image src={'/images/completed_dot.svg'} alt="" width={7} height={7} /> : ''}>
+    <Badge key={day.toString()} overlap="circular" badgeContent={isSelected ? <Image src={'/images/completed_dot.svg'} alt="Active" width={7} height={7} /> : ''}>
       <PickersDay {...other} outsideCurrentMonth={outsideCurrentMonth} day={day} />
     </Badge>
   );

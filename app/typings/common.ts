@@ -6,12 +6,6 @@ export interface IDate {
   dateObj?: Date;
 }
 
-export enum EIntensity {
-  LIGHT = 1,
-  MODERATE = 2,
-  INTENSE = 3,
-}
-
 export enum ELoginType {
   SIGN_IN__email_pass = 1,
   SIGN_IN__otp = 2,
@@ -55,4 +49,52 @@ export interface IRewards {
   src: string;
   name: string;
   xp: number;
+}
+
+export enum ETarMuscle {
+  BACK = 1,
+  CHEST = 2,
+  LEGS = 3,
+  TRICEPS = 4,
+  BICEPS = 5,
+  SHOULDERS = 6,
+}
+
+export enum EWorkoutStatusEnum {
+  PENDING = 0,
+  COMPLETED = 1,
+}
+
+export interface IWorkout {
+  id: number;
+  exercises: Array<IExercise>;
+  createdAt: Date;
+  split: Array<ETarMuscle>;
+  status: EWorkoutStatusEnum;
+  userId: number;
+}
+
+export interface IExercise {
+  id: number;
+  name?: string;
+  src?: string;
+  exerciseId: number;
+  workoutId: number;
+  sets: Array<ISet>;
+  set: number;
+}
+
+export enum EIntensity {
+  LIGHT = 1,
+  MODERATE = 2,
+  INTENSE = 3,
+}
+export interface ISet {
+  id: number;
+  completedReps: number;
+  exerciseId: number;
+  intensity: EIntensity;
+  reps: number;
+  setNo: number;
+  weight: number;
 }

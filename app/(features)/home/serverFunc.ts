@@ -36,6 +36,9 @@ export async function checkUserExists(email): Promise<{ status: number; message:
 
 export async function getWorkout(userId: number, date: Date) {
   const { startOfDay, endOfDay } = getStartAndEndOfByDate(date);
+  if (!startOfDay || !endOfDay) {
+    return;
+  }
 
   const _data = await db.query.workout.findFirst({
     where: (workout, { eq, between, and }) => and(between(workout?.createdAt, startOfDay, endOfDay), eq(workout?.userId, userId)),

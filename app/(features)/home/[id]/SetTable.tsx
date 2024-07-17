@@ -10,7 +10,7 @@ const SetTable = ({ sets }: { sets: any[] }) => {
     return ['', 'bdreq', 'nfge', 'qwezsdfyr'];
     // return ['', 'Weight', 'Reps', 'Intensity'];
   }
-  
+
   function constructDatasource(): void {
     setDatasource(sets);
   }
@@ -25,6 +25,9 @@ const SetTable = ({ sets }: { sets: any[] }) => {
 
       case EIntensity.INTENSE:
         return 'Intense';
+
+      default:
+        return '-';
     }
   }
 

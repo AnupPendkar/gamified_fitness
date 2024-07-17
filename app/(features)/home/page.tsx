@@ -1,7 +1,7 @@
 'use client';
 
 import Date from '@/app/shared/Date';
-import { IDate } from '@/app/typings/common';
+import { IDate, IExercise, IWorkout } from '@/app/typings/common';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
@@ -10,7 +10,7 @@ import { getTodaysDate } from '@/app/utils/timeFormatUtils';
 import { useContext } from '../context';
 
 const Home = () => {
-  const [workout, setWorkout] = useState<any[]>([]);
+  const [exercises, setExercises] = useState<IExercise[]>([]);
   const { setExerciseFunc, setCurrSelectedDate, selectedDate } = useContext();
   const dateRef = useRef<Date>();
   const router = useRouter();
@@ -27,16 +27,14 @@ const Home = () => {
     fetchWorkoutList(date?.dateObj as Date);
   }
 
-  function constructWorkout(res) {
-    const workoutObj = res?.exercises?.map((exer) => ({
-      id: exer?.id,
-      name: exer?.exerciseId,
+  function constructWorkout(res: IWorkout) {
+    const exerList = res?.exercises?.map((exer) => ({
       src: 'images/badge_rookie.svg',
-      sets: exer?.sets,
       time: 10,
+      ...exer,
     }));
 
-    setWorkout(workoutObj);
+    setExercises(exerList);
   }
 
   async function fetchWorkoutList(date: Date) {
@@ -46,29 +44,39 @@ const Home = () => {
 
     if (date) {
       const workout = await getWorkout(userId, date);
-      constructWorkout(workout);
+      constructWorkout(workout as unknown as IWorkout);
     }
   }
 
-  useEffect(() => {
-    fetchWorkoutList(getTodaysDate()?.dateObj as Date);
-  }, []);
+  function getProgress(exer: IExercise): number {
+    const completedReps = exer?.sets?.reduce((prev, curr) => prev + curr?.completedReps, 0);
+    const totalReps = exer?.sets?.reduce((prev, curr) => prev + curr?.reps, 0);
+    // const totSets = exer?.set;
+
+    if (totalReps < completedReps) {
+      return 100;
+    }
+
+    return (completedReps * 100) / totalReps;
+  }
 
   return (
     <div className="p-global">
       <Date getSelectedDate={getSelectedDate} defaultDate={selectedDate} />
 
       <div className="flex flex-wrap items-center justify-between">
-        {workout?.map((itm) => (
-          <div key={itm?.id} onClick={() => handleWorkoutClk(itm)} className="flex flex-col items-center justify-between px-4 w-[150px] py-2 mb-5 rounded-lg bg-secondary">
+        {exercises?.map((itm) => (
+          <div key={itm?.id} onClick={() => handleWorkoutClk(itm)} className="flex flex-col items-center justify-between relative px-4 w-[150px] py-2 mb-5 rounded-lg bg-secondary">
             <p className="font-isb text-[16px]">{itm?.name}</p>
-            <Image src={itm?.src} width={64} height={30} alt={itm?.name} />
+            <Image src={itm?.src as string} width={64} height={30} alt="Exercise" />
 
             <div className="flex items-center justify-center gap-x-1 text-[14px] w-full">
               <p className="text-primary_text">{itm?.sets?.length} Sets</p>
               <p className="text-primary_text">•</p>
               <p className="text-primary_text">{itm?.sets?.length} Min</p>
             </div>
+
+            <div className="absolute bg-success top-0 left-0 h-full rounded-lg opacity-15" style={{ width: `${getProgress(itm)}%` }}></div>
           </div>
         ))}
       </div>

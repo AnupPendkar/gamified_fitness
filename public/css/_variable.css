@@ -1,29 +1,21 @@
 :root {
-    
-    /* Overlayes */
-    --overlay-bg:#7ECC29;
-    --overlay-bg-alpha: #E2F4CE;
+  /* Background */
+  --color-primary: #151515;
+  --color-secondary: #202023;
+  --color-ternary: #0f151b;
+  --color-success: #baf247;
+  --color-background: #151515;
 
-    /* Http Back overlay */
-    --http-loader-bg: rgba(0,0,0,0.5);
+  /* Text */
+  --color-text-primary: #dddde1;
+  --color-text-error: #f52424;
+  --color-text-secondary: #81809e;
+  --color-text-primary-dark: #191919;
+  --color-text-secondary-dark: #3a3945;
 
-    /* Text */
-    --app-text-clr: #191919;
+  /* Padding */
+  --global-padding: 0 20px;
 
-    /* Buttons */
-    --app-btn-bg: #7ECC29;
-    --app-btn-cancel: #E87474;
-    --app-btn-close:#A1A1A1;
-
-    /* cards */
-    --app-card-body: #FFFFFF;
-    --app-card-header:#D8D8D8;
-
-
-    /* drawers */
-    --app-drawer-bg:#E2F4CE;
-
-
-    /* input fields */
-    --app-input-bg:#ffffff;
+  /* input fields */
+  --app-input-bg: #ffffff;
 }

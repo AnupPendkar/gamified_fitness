@@ -8,6 +8,7 @@ import { getTodaysDate } from '@/app/utils/timeFormatUtils';
 
 const Rewards = () => {
   const [rewards, setRewards] = useState<any[]>([]);
+  const [userId, setUserId] = useState<number>(0);
 
   function getSelectedDate(date: IDate): void {
     fetchRewardsByDate(date?.dateObj as Date);
@@ -17,14 +18,13 @@ const Rewards = () => {
     const session = await getSession();
     const { user } = await checkUserExists(session?.user?.email);
     const userId = user?.id;
+    setUserId(user?.id);
 
     if (date) {
       const _rewards = await getRewards(userId, date);
       setRewards(_rewards);
     }
   }
-
-  console.log(rewards);
 
   useEffect(() => {
     fetchRewardsByDate(getTodaysDate()?.dateObj as Date);

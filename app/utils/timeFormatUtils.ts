@@ -69,6 +69,15 @@ function getStartAndEndOfByDate(date: Date) {
   };
 }
 
+function getMonthTimestamps(date: Date): { startTimestamp: Date; endTimestamp: Date } {
+  const now = new Date(date);
+
+  const start = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 1, 0, 0, 0, 0));
+  const end = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth() + 1, 0, 23, 59, 59, 999));
+
+  return { startTimestamp: start, endTimestamp: end };
+}
+
 function areTwoDatesEqual(date1: Date, date2: Date): boolean {
   if (date1?.getFullYear() !== date2?.getFullYear()) {
     return false;
@@ -85,4 +94,4 @@ function areTwoDatesEqual(date1: Date, date2: Date): boolean {
   return true;
 }
 
-export { getFormatedTime, getTodaysDate, getAllDatesWithDays, getStartAndEndOfByDate, areTwoDatesEqual };
+export { getFormatedTime, getTodaysDate, getAllDatesWithDays, getStartAndEndOfByDate, areTwoDatesEqual, getMonthTimestamps };

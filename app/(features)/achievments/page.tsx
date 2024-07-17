@@ -124,7 +124,7 @@ const Achievements = () => {
         <div className="current-tag relative flex flex-col items-center">
           {getUpcomingBadgeDetails() && (
             <>
-              <Image src={(getUpcomingBadgeDetails() as IRewards)?.src} width={100} height={100} alt={(getUpcomingBadgeDetails() as IRewards)?.name} />
+              <Image src={(getUpcomingBadgeDetails() as IRewards)?.src} width={100} height={100} alt={'Reward'} />
               <p className="text-secondary_text max-w-[300px]">
                 {getUpcomingBadgeDetails() ? (
                   <>
@@ -148,7 +148,7 @@ const Achievements = () => {
         <div className="tag flex flex-wrap justify-center items-center gap-x-9 gap-y-5">
           {badges.map((itm) => (
             <div key={itm?.id} className="flex flex-col items-center justify-center">
-              <Image className={`${user && user?.xp < itm?.xp && 'opacity-50'}`} src={itm?.src} width={80} height={80} alt={itm?.name} />
+              <Image className={`${user && user?.xp < itm?.xp && 'opacity-50'}`} src={itm?.src} width={80} height={80} alt="Badge" />
               <p className="font-isb">{itm?.name}</p>
             </div>
           ))}

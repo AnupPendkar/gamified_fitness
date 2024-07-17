@@ -46,7 +46,7 @@ const Footer = () => {
     <div className="app-footer h-[55px] rounded-xl flex justify-between px-4 bg-success m-global">
       {menu.map((itm) => (
         <div key={itm?.id} onClick={() => onMenuClk(itm?.route)} className="h-full flex justify-center items-center">
-          <Image width={22} height={22} src={itm?.img} alt={itm?.alt} />
+          <Image width={22} height={22} src={itm?.img} alt="Menu Icon" />
         </div>
       ))}
     </div>
