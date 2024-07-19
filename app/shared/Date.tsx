@@ -153,7 +153,7 @@ const Date = ({ getSelectedDate, defaultDate }: { getSelectedDate: (date: IDate 
   }, [defaultDate]);
 
   return (
-    <div>
+    <div className="sticky top-[1px] bg-primary z-50">
       <div className="flex items-center justify-between pb-3">
         <p className="text-[16px] font-ib text-primary_text">gdfes + efoelcwe</p>
         <LocalizationProvider dateAdapter={AdapterDayjs}>

@@ -1,5 +1,5 @@
 import { relations } from 'drizzle-orm';
-import { date, serial, pgEnum, pgTable, text, varchar, integer, timestamp, primaryKey } from 'drizzle-orm/pg-core';
+import { date, serial, pgEnum, pgTable, text, varchar, integer, timestamp, primaryKey, jsonb, decimal } from 'drizzle-orm/pg-core';
 import { rewards } from './Rewards';
 import { workout } from './Workout';
 import type { AdapterAccount } from '@auth/core/adapters';
@@ -26,8 +26,33 @@ export const userDetails = pgTable('user_details', {
   phoneNo: varchar('phoneNo', { length: 20 }).notNull().unique(),
   gender: genderEnum('gender'),
   dob: date('date_of_birth'),
+  weight: decimal('weight'),
+  height: decimal('height'),
+  plan: jsonb('plan')
+    .$type<{
+      day: number;
+      split: Array<number>;
+      exercises: Array<{
+        exerciseId: number;
+        sets: Array<{
+          setNo: number;
+          totalReps: number;
+          completedReps: number;
+          intensity: number;
+          weight: string;
+        }>;
+      }>;
+    }>()
+    .array(),
   userId: integer('user_id').references(() => users.id),
 });
+
+export const userDetailsRelations = relations(userDetails, ({ one }) => ({
+  user: one(users, {
+    fields: [userDetails?.userId],
+    references: [users?.id],
+  }),
+}));
 
 export const sessions = pgTable('session', {
   sessionToken: text('sessionToken').notNull().primaryKey(),

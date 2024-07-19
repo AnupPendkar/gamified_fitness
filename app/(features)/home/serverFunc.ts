@@ -42,13 +42,6 @@ export async function getWorkout(userId: number, date: Date) {
 
   const _data = await db.query.workout.findFirst({
     where: (workout, { eq, between, and }) => and(between(workout?.createdAt, startOfDay, endOfDay), eq(workout?.userId, userId)),
-    with: {
-      exercises: {
-        with: {
-          sets: true,
-        },
-      },
-    },
   });
 
   return _data;

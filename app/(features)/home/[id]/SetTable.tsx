@@ -62,7 +62,7 @@ const SetTable = ({ sets }: { sets: any[] }) => {
                 </TableCell>
 
                 <TableCell align="center" width={'15%'}>
-                  <span className="fsr-16 font-isb ">{itm?.weight} Iw</span>
+                  <span className="fsr-16 font-isb ">{parseInt(itm?.weight)} Iw</span>
                   {/* <span className="fsr-16 font-isb ">{itm?.weight} Kg</span> */}
                 </TableCell>
 
