@@ -2,9 +2,11 @@
 
 import { useState } from 'react';
 import { Context } from './context';
+import { IWorkout } from '../typings/common';
 
 const FeatureProvider = ({ children }) => {
   const [exercise, setExercise] = useState({});
+  const [workout, setWorkout] = useState<IWorkout | null>(null);
   const [selectedDate, setSelectedDate] = useState<Date | undefined>();
 
   function setExerciseFunc(exer) {
@@ -17,7 +19,7 @@ const FeatureProvider = ({ children }) => {
 
   return (
     <>
-      <Context.Provider value={{ exercise, setExerciseFunc, setCurrSelectedDate, selectedDate }}>{children}</Context.Provider>
+      <Context.Provider value={{ workout, setWorkout, exercise, setExerciseFunc, setCurrSelectedDate, selectedDate }}>{children}</Context.Provider>
     </>
   );
 };

@@ -1008,7 +1008,7 @@ async function setupCronJob() {
   //   });
 }
 
-setupCronJob();
+// setupCronJob();
 
 export default async function handler(req, res) {
   res.status(200).json('Cron job set up');

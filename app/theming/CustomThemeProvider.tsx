@@ -15,6 +15,11 @@ const CustomThemeProvider = (props: MyThemeProviderProps) => {
   const GlobalStyle = () => (
     <GlobalStyles
       styles={(theme) => ({
+        // Dialog
+        '.MuiDialog-paper': {
+          borderRadius: '8px !important',
+        },
+
         // Table
         '.MuiTableContainer-root': {
           overflowX: 'hidden !important',
@@ -48,20 +53,14 @@ const CustomThemeProvider = (props: MyThemeProviderProps) => {
           color: '#ffffff !important',
         },
 
-        // Appbar
-        '.MuiAppBar-root': {
-          backgroundColor: '#0F151B !important',
-          color: '#ffffff',
-        },
-
         // Menu
         '.MuiMenu-list': {
           paddingBottom: '0 !important',
           paddingTop: '0 !important',
         },
-        '.MuiMenu-paper': {
-          boxShadow: '0px 2px 9px -2px #282828 !important;',
-        },
+        // '.MuiMenu-paper': {
+        //   boxShadow: '0px 2px 9px -2px #282828 !important;',
+        // },
 
         // Snackbar
         '.MuiAlert-root': {
@@ -93,10 +92,6 @@ const CustomThemeProvider = (props: MyThemeProviderProps) => {
 
         '.MuiFormControl-root MuiTextField-root': {
           display: 'none !important',
-        },
-
-        '.MuiDialogContent-root': {
-          borderRadius: '7px',
         },
 
         '.MuiPickersLayout-root': {

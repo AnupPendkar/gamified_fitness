@@ -1,10 +1,13 @@
 'use client';
 
-import { EIntensity } from '@/app/typings/common';
-import { Table, TableContainer, Paper, TableHead, TableRow, TableCell, TableBody, styled, Stack, Skeleton, Tooltip } from '@mui/material';
+import { EAction, EIntensity, ISet } from '@/app/typings/common';
+import { Table, TableContainer, TableHead, TableRow, TableCell, TableBody } from '@mui/material';
 import { useEffect, useState } from 'react';
+import TableRecordDialog from './TableRecordDialog';
+
 const SetTable = ({ sets }: { sets: any[] }) => {
-  const [datasource, setDatasource] = useState<any>([]);
+  const [datasource, setDatasource] = useState<Array<ISet>>([]);
+  const [clickedRow, setClickedRow] = useState<ISet | null>(null);
 
   function getTableColumnNames(): Array<string> {
     return ['', 'bdreq', 'nfge', 'qwezsdfyr'];
@@ -31,6 +34,10 @@ const SetTable = ({ sets }: { sets: any[] }) => {
     }
   }
 
+  function handleSubmit(state: EAction, data?: any) {
+    setClickedRow(null);
+  }
+
   useEffect(() => {
     constructDatasource();
   }, []);
@@ -55,14 +62,14 @@ const SetTable = ({ sets }: { sets: any[] }) => {
           </TableHead>
           <TableBody>
             {datasource?.map((itm) => (
-              <TableRow key={itm?.id}>
+              <TableRow onClick={() => setClickedRow(itm)} key={itm?.setNo}>
                 <TableCell align="center" width={'40%'}>
                   <span className="fsr-16 font-isb ">{itm?.setNo}</span>
                   {/* <span className="fsr-16 font-isb ">Set {itm?.id}</span> */}
                 </TableCell>
 
                 <TableCell align="center" width={'15%'}>
-                  <span className="fsr-16 font-isb ">{parseInt(itm?.weight)} Iw</span>
+                  <span className="fsr-16 font-isb ">{itm?.weight} Iw</span>
                   {/* <span className="fsr-16 font-isb ">{itm?.weight} Kg</span> */}
                 </TableCell>
 
@@ -80,6 +87,8 @@ const SetTable = ({ sets }: { sets: any[] }) => {
           </TableBody>
         </Table>
       </TableContainer>
+
+      <TableRecordDialog setData={clickedRow} handleSubmit={handleSubmit} />
     </>
   );
 };

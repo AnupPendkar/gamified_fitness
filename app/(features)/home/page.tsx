@@ -4,14 +4,13 @@ import Date from '@/app/shared/Date';
 import { IDate, IExercise, IWorkout } from '@/app/typings/common';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { checkUserExists, getSession, getWorkout } from './serverFunc';
-import { getTodaysDate } from '@/app/utils/timeFormatUtils';
 import { useContext } from '../context';
 
 const Home = () => {
   const [exercises, setExercises] = useState<IExercise[]>([]);
-  const { setExerciseFunc, setCurrSelectedDate, selectedDate } = useContext();
+  const { setExerciseFunc, setWorkout, setCurrSelectedDate, selectedDate } = useContext();
   const dateRef = useRef<Date>();
   const router = useRouter();
 
@@ -23,8 +22,12 @@ const Home = () => {
   }
 
   function getSelectedDate(date: IDate): void {
+    if (dateRef.current?.getDate() !== date?.date) {
+      console.log('fetchingggggggggggggggggggggggggggggg');
+      fetchWorkoutList(date?.dateObj as Date);
+    }
+
     dateRef.current = date?.dateObj;
-    fetchWorkoutList(date?.dateObj as Date);
   }
 
   function constructWorkout(res: IWorkout) {
@@ -44,6 +47,7 @@ const Home = () => {
 
     if (date) {
       const workout = await getWorkout(userId, date);
+      setWorkout(workout as unknown as IWorkout);
       constructWorkout(workout as unknown as IWorkout);
     }
   }
@@ -51,7 +55,6 @@ const Home = () => {
   function getProgress(exer: IExercise): number {
     const completedReps = exer?.sets?.reduce((prev, curr) => prev + curr?.completedReps, 0);
     const totalReps = exer?.sets?.reduce((prev, curr) => prev + curr?.reps, 0);
-    // const totSets = exer?.set;
 
     if (totalReps < completedReps) {
       return 100;

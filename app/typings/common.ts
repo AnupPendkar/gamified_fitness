@@ -61,6 +61,11 @@ export enum ETarMuscle {
   REST = 7,
 }
 
+export enum EAction {
+  CLOSE = 1,
+  SUBMIT = 2,
+}
+
 export enum EDays {
   MONDAY = 1,
   TUESDAY = 2,
@@ -101,11 +106,9 @@ export enum EIntensity {
   INTENSE = 3,
 }
 export interface ISet {
-  id: number;
   completedReps: number;
-  exerciseId: number;
   intensity: EIntensity;
-  reps: number;
   setNo: number;
+  reps: number;
   weight: number;
 }

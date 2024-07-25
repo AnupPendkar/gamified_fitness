@@ -125,45 +125,57 @@ export const darkTheme = createTheme({
       styleOverrides: {
         root: {
           '.MuiInputBase-root': {
-            backgroundColor: 'var(--color-secondary)',
             borderRadius: '10px',
             color: 'var(--color-text-primary)',
-            caretColor: 'var(--color-text-primary)',
+            padding: '3px 3px !important',
+            marginTop: '8px !important',
+            paddingTop: '10px !important',
 
             '& .MuiInputBase-input': {
-              padding: '12px 12px !important',
+              padding: '3px 3px !important',
               fontSize: '16px',
             },
           },
         },
       },
     },
-    MuiDialogTitle: {
+    MuiInputLabel: {
       styleOverrides: {
         root: {
-          fontSize: 20,
-          borderRadius: '6px 6px 0 0',
-          fontFamily: 'Inter Regular',
-          padding: '7px 24px',
-          backgroundColor: '#202023',
-          boxShadow: '0px 4px 16px 0px #282828',
+          zIndex: 1,
+          color: 'var(--color-text-primary) !important',
         },
+      },
+    },
+    MuiDialogTitle: {
+      styleOverrides: {
+        root: ({ theme }) => ({
+          fontSize: 14,
+          fontFamily: 'Inter Regular',
+          padding: '10px 24px',
+          backgroundColor: theme.palette.ternary?.main,
+          boxShadow: '0px 4px 16px 0px #282828',
+        }),
       },
     },
     MuiDialogContent: {
       styleOverrides: {
-        root: {
-          paddingTop: '25px !important',
-          backgroundColor: '#19222c',
-        },
+        root: ({ theme }) => ({
+          paddingTop: '7px !important',
+          paddingBottom: '10px !important',
+          backgroundColor: theme.palette.secondary.main,
+        }),
       },
     },
     MuiDialogActions: {
       styleOverrides: {
-        root: {
+        root: ({ theme }) => ({
+          backgroundColor: theme.palette.secondary.main,
+          padding: '0px 24px',
+          paddingBottom: '20px',
+          borderRadius: '0 0 6px 6px',
           gap: 10,
-          padding: 0,
-        },
+        }),
       },
     },
 
@@ -173,24 +185,23 @@ export const darkTheme = createTheme({
           backgroundColor: 'inherit',
           boxShadow: 'none',
           backgroundImage: 'none',
-          // filter: "drop-shadow(0px 4px 4px rgba(87, 87, 87, 0.25))",
         },
       },
     },
 
     MuiMenuItem: {
       styleOverrides: {
-        root: {
+        root: ({ theme }) => ({
+          fontSize: 12,
           paddingTop: 10,
           paddingBottom: 10,
-          backgroundColor: '#DDDDE1',
-          color: '#191919',
+          backgroundColor: `${theme.palette.primary.main} !important`,
+          color: `${theme.palette.text.primary} !important`,
 
           '&:hover': {
-            backgroundColor: '#F1f1f1 !important',
-            color: '#191919',
+            backgroundColor: `${theme.palette.secondary.main} !important`,
           },
-        },
+        }),
       },
     },
   },
