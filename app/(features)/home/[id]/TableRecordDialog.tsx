@@ -15,7 +15,7 @@ const TableRecordDialog = ({ setData, handleSubmit }: TableRecordDialogProp) => 
   const { workout, exercise } = useContext();
 
   async function handleFinalSubmit() {
-    const foundWorkout = workout?.exercises?.find((exer) => exer?.id === exercise?.id);
+    const foundWorkout = workout?.exercises?.find((exer) => exer?.exerciseId === exercise?.exerciseId);
     if (foundWorkout) {
       foundWorkout?.sets?.forEach((_set) => {
         if (_set?.setNo === setData?.setNo) {
@@ -37,7 +37,7 @@ const TableRecordDialog = ({ setData, handleSubmit }: TableRecordDialogProp) => 
 
   return (
     <Dialog disableEscapeKeyDown open={setData !== null} onClose={() => handleSubmit(EAction.CLOSE)}>
-      <DialogTitle>Set 1</DialogTitle>
+      <DialogTitle>Set {setData?.setNo}</DialogTitle>
       <DialogContent>
         <TextField value={weight} onChange={(e) => setWeight(+e.target.value)} type="number" label="Keight (kg)" variant="standard" />
         <TextField value={reps} onChange={(e) => setReps(+e.target.value)} type="number" sx={{ marginTop: 1, marginBottom: 3 }} label="Keps" variant="standard" />

@@ -109,6 +109,6 @@ export interface ISet {
   completedReps: number;
   intensity: EIntensity;
   setNo: number;
-  reps: number;
+  totalReps: number;
   weight: number;
 }

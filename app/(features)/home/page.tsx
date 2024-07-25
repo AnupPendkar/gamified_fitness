@@ -54,7 +54,7 @@ const Home = () => {
 
   function getProgress(exer: IExercise): number {
     const completedReps = exer?.sets?.reduce((prev, curr) => prev + curr?.completedReps, 0);
-    const totalReps = exer?.sets?.reduce((prev, curr) => prev + curr?.reps, 0);
+    const totalReps = exer?.sets?.reduce((prev, curr) => prev + curr?.totalReps, 0);
 
     if (totalReps < completedReps) {
       return 100;

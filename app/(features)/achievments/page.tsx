@@ -101,7 +101,6 @@ const Achievements = () => {
       }
 
       const _user = await getUserById(user.id);
-      console.log(_user);
       if (!_user) {
         throw new Error('User details could not be retrieved');
       }

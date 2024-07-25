@@ -10,8 +10,8 @@ const SetTable = ({ sets }: { sets: any[] }) => {
   const [clickedRow, setClickedRow] = useState<ISet | null>(null);
 
   function getTableColumnNames(): Array<string> {
-    return ['', 'bdreq', 'nfge', 'qwezsdfyr'];
-    // return ['', 'Weight', 'Reps', 'Intensity'];
+    return ['', 'bdreq', 'Dodal Dpps', 'nfge', 'qwezsdfyr'];
+    // return ['', 'Weight', 'Total Reps', 'Reps', 'Intensity'];
   }
 
   function constructDatasource(): void {
@@ -71,6 +71,11 @@ const SetTable = ({ sets }: { sets: any[] }) => {
                 <TableCell align="center" width={'15%'}>
                   <span className="fsr-16 font-isb ">{itm?.weight} Iw</span>
                   {/* <span className="fsr-16 font-isb ">{itm?.weight} Kg</span> */}
+                </TableCell>
+
+                <TableCell align="center" width={'20%'}>
+                  <span className="fsr-16 font-isb ">{itm?.totalReps}</span>
+                  {/* <span className="fsr-16 font-isb ">{itm?.reps} Reps</span> */}
                 </TableCell>
 
                 <TableCell align="center" width={'20%'}>

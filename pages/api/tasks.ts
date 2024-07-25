@@ -975,7 +975,6 @@ async function createWorkoutForUser(user) {
     const today = new Date();
     const nextDate = new Date(today);
     nextDate.setDate(today.getDate() + idx);
-    console.log(nextDate);
 
     const [newWorkout, ...rest] = await db
       .insert(workout)
@@ -991,7 +990,6 @@ async function createWorkoutForUser(user) {
 }
 
 async function setupCronJob() {
-  console.log('<-----------------------setup called--------------------->');
   try {
     const users = await getAllUsers();
 
