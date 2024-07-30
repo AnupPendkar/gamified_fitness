@@ -10,7 +10,7 @@ import { useContext } from '../context';
 
 const Home = () => {
   const [exercises, setExercises] = useState<IExercise[]>([]);
-  const { setExerciseFunc, setWorkout, setCurrSelectedDate, selectedDate } = useContext();
+  const { setExerciseFunc, setWorkout, workout, setCurrSelectedDate, selectedDate } = useContext();
   const dateRef = useRef<Date>();
   const router = useRouter();
 
@@ -23,7 +23,6 @@ const Home = () => {
 
   function getSelectedDate(date: IDate): void {
     if (dateRef.current?.getDate() !== date?.date) {
-      console.log('fetchingggggggggggggggggggggggggggggg');
       fetchWorkoutList(date?.dateObj as Date);
     }
 
@@ -53,19 +52,24 @@ const Home = () => {
   }
 
   function getProgress(exer: IExercise): number {
-    const completedReps = exer?.sets?.reduce((prev, curr) => prev + curr?.completedReps, 0);
-    const totalReps = exer?.sets?.reduce((prev, curr) => prev + curr?.totalReps, 0);
+    const totSets = exer?.sets?.length;
+    const completedSets = exer?.sets?.reduce((prev, curr) => {
+      if (curr?.completedReps >= (2 * curr?.totalReps) / 3) {
+        return prev + 1;
+      }
+      return prev;
+    }, 0);
 
-    if (totalReps < completedReps) {
+    if (totSets < completedSets) {
       return 100;
     }
 
-    return (completedReps * 100) / totalReps;
+    return (completedSets * 100) / totSets;
   }
 
   return (
     <div className="p-global">
-      <Date getSelectedDate={getSelectedDate} defaultDate={selectedDate} />
+      <Date split={workout?.split} getSelectedDate={getSelectedDate} defaultDate={selectedDate} />
 
       <div className="flex flex-wrap items-center justify-between">
         {exercises?.map((itm) => (

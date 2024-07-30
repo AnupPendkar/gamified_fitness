@@ -112,9 +112,7 @@ const Authentication = ({ currType, onSubmit, onActionClk }: IAuthenticationProp
     return type.some((tp) => currType === tp);
   }
 
-  async function _onSubmit(data: TAuthDataSchema) {
-    console.log('dsfdfsdf', data);
-  }
+  async function _onSubmit(data: TAuthDataSchema) {}
 
   function handleFormSubmit() {
     onSubmit(getValues());

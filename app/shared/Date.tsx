@@ -8,11 +8,11 @@ import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DayCalendarSkeleton, PickersDay, LocalizationProvider, PickersDayProps } from '@mui/x-date-pickers';
 import Badge from '@mui/material/Badge';
-import { IDate } from '../typings/common';
+import { ETarMuscle, IDate } from '../typings/common';
 import { cloneDeep } from 'lodash';
 import { fetchActiveDays } from './serverFunc';
 
-const Date = ({ getSelectedDate, defaultDate }: { getSelectedDate: (date: IDate | any) => void; defaultDate?: Date }) => {
+const Date = ({ getSelectedDate, defaultDate, split }: { getSelectedDate: (date: IDate | any) => void; defaultDate?: Date; split?: ETarMuscle[] }) => {
   const dateContainerRef = useRef<HTMLDivElement>(null);
   const [openState, setOpenState] = useState(false);
   const [currMonthDates, setCurrMonthDates] = useState<IDate[]>([]);
@@ -155,7 +155,20 @@ const Date = ({ getSelectedDate, defaultDate }: { getSelectedDate: (date: IDate 
   return (
     <div className="sticky top-[1px] bg-primary z-50">
       <div className="flex items-center justify-between pb-3">
-        <p className="text-[16px] font-ib text-primary_text">gdfes + efoelcwe</p>
+
+        <div className='flex items-center'>
+          {split && split?.length > 0 ? (
+            split?.map((splt, idx) => (
+              <div className="flex items-center">
+                <p className="text-[16px] font-ib text-primary_text">{idx > 0 ? ' + ' : ''}</p>
+                <p className="text-[16px] font-ib text-primary_text">{splt}</p>
+              </div>
+            ))
+          ) : (
+            <p className="text-[16px] font-ib text-primary_text">-</p>
+          )}
+        </div>
+
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <Image onClick={() => setOpenState(true)} src={'/images/calender.svg'} width={22} height={22} alt="Calender" />
           <MobileDatePicker

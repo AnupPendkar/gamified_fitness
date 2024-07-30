@@ -10,7 +10,13 @@ const SetTable = ({ sets }: { sets: any[] }) => {
   const [clickedRow, setClickedRow] = useState<ISet | null>(null);
 
   function getTableColumnNames(): Array<string> {
-    return ['', 'bdreq', 'Dodal Dpps', 'nfge', 'qwezsdfyr'];
+    return [
+      '',
+      'bdreq',
+      'Dodal Dpps',
+      'nfge',
+      // , 'qwezsdfyr'
+    ];
     // return ['', 'Weight', 'Total Reps', 'Reps', 'Intensity'];
   }
 
@@ -31,6 +37,12 @@ const SetTable = ({ sets }: { sets: any[] }) => {
 
       default:
         return '-';
+    }
+  }
+
+  function handleClk(set: ISet) {
+    if (set?.completedReps === 0) {
+      setClickedRow(set);
     }
   }
 
@@ -62,7 +74,7 @@ const SetTable = ({ sets }: { sets: any[] }) => {
           </TableHead>
           <TableBody>
             {datasource?.map((itm) => (
-              <TableRow onClick={() => setClickedRow(itm)} key={itm?.setNo}>
+              <TableRow className="relative" onClick={() => handleClk(itm)} key={itm?.setNo}>
                 <TableCell align="center" width={'40%'}>
                   <span className="fsr-16 font-isb ">{itm?.setNo}</span>
                   {/* <span className="fsr-16 font-isb ">Set {itm?.id}</span> */}
@@ -83,10 +95,15 @@ const SetTable = ({ sets }: { sets: any[] }) => {
                   {/* <span className="fsr-16 font-isb ">{itm?.reps} Reps</span> */}
                 </TableCell>
 
-                <TableCell align="center" width={'25%'}>
+                {/* <TableCell align="center" width={'25%'}>
                   <span className="fsr-16 font-isb ">{getStringFromIntensityEnum(+itm?.intensity)}</span>
-                  {/* <span className="fsr-16 font-isb ">{itm?.intensity}</span> */}
-                </TableCell>
+                  <span className="fsr-16 font-isb ">{itm?.intensity}</span>
+                </TableCell> */}
+
+                <div
+                  className="absolute bg-success top-0 left-0 h-full rounded-lg opacity-15"
+                  style={{ width: itm?.completedReps >= (2 * itm?.totalReps) / 3 ? '100%' : '0%' }}
+                ></div>
               </TableRow>
             ))}
           </TableBody>

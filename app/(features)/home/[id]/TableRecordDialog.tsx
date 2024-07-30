@@ -25,7 +25,7 @@ const TableRecordDialog = ({ setData, handleSubmit }: TableRecordDialogProp) => 
       });
     }
 
-    await putWorkout(workout?.id as number, workout?.exercises as IExercise[]);
+    await putWorkout(workout?.id as number, workout?.exercises as IExercise[], exercise);
     handleSubmit(EAction.SUBMIT);
   }
 

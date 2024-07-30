@@ -1,28 +1,54 @@
 'use client';
 
 import Date from '@/app/shared/Date';
-import { IDate } from '@/app/typings/common';
-import { useEffect, useState } from 'react';
-import { checkUserExists, getRewards, getSession } from './serverFunc';
+import { ETarMuscle, IDate, IExercise } from '@/app/typings/common';
+import { useEffect, useRef, useState } from 'react';
+import { checkUserExists, getSession, getWorkout } from './serverFunc';
 import { getTodaysDate } from '@/app/utils/timeFormatUtils';
 
 const Rewards = () => {
   const [rewards, setRewards] = useState<any[]>([]);
-  const [userId, setUserId] = useState<number>(0);
+  const workoutRef = useRef<ETarMuscle[]>([]);
 
   function getSelectedDate(date: IDate): void {
     fetchRewardsByDate(date?.dateObj as Date);
+  }
+
+  function isExerciseComplete(exer: IExercise): boolean {
+    const totSets = exer?.sets?.length;
+    const completedSets = exer?.sets?.reduce((prev, curr) => {
+      if (curr?.completedReps >= (2 * curr?.totalReps) / 3) {
+        return prev + 1;
+      }
+      return prev;
+    }, 0);
+
+    return completedSets === totSets;
+  }
+
+  function generateRewardsByExer(completedExer: IExercise[]) {
+    const _rewards = completedExer?.map((exer, idx) => ({
+      id: idx,
+      task: exer?.exerciseId,
+      xp: 10,
+    }));
+
+    setRewards(_rewards);
   }
 
   async function fetchRewardsByDate(date: Date) {
     const session = await getSession();
     const { user } = await checkUserExists(session?.user?.email);
     const userId = user?.id;
-    setUserId(user?.id);
 
     if (date) {
-      const _rewards = await getRewards(userId, date);
-      setRewards(_rewards);
+      const workout = await getWorkout(userId, date);
+      workoutRef.current = workout?.split as ETarMuscle[];
+      const completedExer = workout?.exercises?.filter((exer) => isExerciseComplete(exer));
+
+      if (completedExer) {
+        generateRewardsByExer(completedExer);
+      }
     }
   }
 
@@ -32,7 +58,7 @@ const Rewards = () => {
 
   return (
     <div className="p-global">
-      <Date getSelectedDate={getSelectedDate} />
+      <Date split={workoutRef.current} getSelectedDate={getSelectedDate} />
 
       {rewards?.map((itm) => (
         <div key={itm?.id} className="flex items-center justify-between px-4 h-[46px] mb-4 rounded-md bg-secondary">
