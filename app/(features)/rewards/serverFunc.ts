@@ -18,21 +18,6 @@ export async function getRewards(userId: number, date: Date) {
   return data;
 }
 
-export async function getSession() {
-  const user = await auth();
-  return user;
-}
-
-export async function checkUserExists(email): Promise<{ status: number; message: string; user?: any }> {
-  const [user, ...rest] = await db.select().from(users).where(eq(users?.email, email));
-
-  if (isPropEmpty(user)) {
-    return { status: 403, message: 'User not found.' };
-  } else {
-    return { status: 200, message: 'User exists!', user };
-  }
-}
-
 export async function getWorkout(userId: number, date: Date): Promise<IWorkout | undefined> {
   const { startOfDay, endOfDay } = getStartAndEndOfByDate(date);
   if (!startOfDay || !endOfDay) {

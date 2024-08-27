@@ -6,17 +6,8 @@ import Stack from '@/app/shared/Stack';
 import { EAuthAction, ELoginType } from '@/app/typings/common';
 import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import {
-  checkUserExists,
-  getSession,
-  handleAppleOAuthLogin,
-  handleCrendentialLogin,
-  handleMetaOAuthLogin,
-  handleGoogleOAuthLogin,
-  handleSignOut,
-  userLogin,
-  userRegister,
-} from './serverFunc';
+import { handleAppleOAuthLogin, handleCrendentialLogin, handleMetaOAuthLogin, handleGoogleOAuthLogin, handleSignOut, userLogin, userRegister } from './serverFunc';
+import { checkUserExists } from '@/app/globalServerFunc';
 
 const Authenticate = () => {
   const [loginType, setLoginType] = useState<ELoginType | null>();

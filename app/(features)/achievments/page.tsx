@@ -2,12 +2,14 @@
 
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
-import { checkUserExists, getSession, getUserById } from './serverFunc';
-import { IRewards, IUser } from '@/app/typings/common';
+import { getUserById } from './serverFunc';
+import { IRewards, IUser, UserDetailsEnum } from '@/app/typings/common';
+import useCheckSession from '@/app/hooks/useCheckSession';
 
 const Achievements = () => {
   const [user, setUser] = useState<IUser | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const { handleUserSession } = useCheckSession();
 
   const badges: Array<IRewards> = [
     {
@@ -90,17 +92,12 @@ const Achievements = () => {
 
   async function getUserInfo() {
     try {
-      const session = await getSession();
-      if (!session || !session.user) {
-        throw new Error('Session or user not found');
+      const userId = localStorage.getItem(UserDetailsEnum.GAMIFIED_USER_ID);
+      if (!userId) {
+        return;
       }
 
-      const { user } = await checkUserExists(session.user.email);
-      if (!user || !user.id) {
-        throw new Error('User not found');
-      }
-
-      const _user = await getUserById(user.id);
+      const _user = await getUserById(+userId);
       if (!_user) {
         throw new Error('User details could not be retrieved');
       }
@@ -112,7 +109,10 @@ const Achievements = () => {
   }
 
   useEffect(() => {
-    getUserInfo();
+    (async function () {
+      await handleUserSession();
+      await getUserInfo();
+    })();
   }, []);
 
   return (

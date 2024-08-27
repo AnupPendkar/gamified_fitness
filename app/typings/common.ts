@@ -112,3 +112,8 @@ export interface ISet {
   totalReps: number;
   weight: number;
 }
+
+export enum UserDetailsEnum {
+  GAMIFIED_USER_ID = 'GAMIFIED_USER_ID',
+  GAMIFIED_USER_NAME = 'GAMIFIED_USER_NAME',
+}

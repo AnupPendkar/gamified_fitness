@@ -1,4 +1,4 @@
-import { EAction, IExercise, ISet } from '@/app/typings/common';
+import { EAction, IExercise, ISet, UserDetailsEnum } from '@/app/typings/common';
 import { DialogTitle, Dialog, DialogActions, TextField, DialogContent, Button } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useContext } from '../../context';
@@ -25,8 +25,11 @@ const TableRecordDialog = ({ setData, handleSubmit }: TableRecordDialogProp) => 
       });
     }
 
-    await putWorkout(workout?.id as number, workout?.exercises as IExercise[], exercise);
-    handleSubmit(EAction.SUBMIT);
+    const userId = localStorage.getItem(UserDetailsEnum.GAMIFIED_USER_ID);
+    if (userId) {
+      await putWorkout(workout?.id as number, workout?.exercises as IExercise[], exercise, +userId);
+      handleSubmit(EAction.SUBMIT);
+    }
   }
 
   useEffect(() => {

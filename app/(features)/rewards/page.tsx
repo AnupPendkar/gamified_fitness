@@ -1,14 +1,16 @@
 'use client';
 
 import Date from '@/app/shared/Date';
-import { ETarMuscle, IDate, IExercise } from '@/app/typings/common';
+import { ETarMuscle, IDate, IExercise, UserDetailsEnum } from '@/app/typings/common';
 import { useEffect, useRef, useState } from 'react';
-import { checkUserExists, getSession, getWorkout } from './serverFunc';
+import { getWorkout } from './serverFunc';
 import { getTodaysDate } from '@/app/utils/timeFormatUtils';
+import useCheckSession from '@/app/hooks/useCheckSession';
 
 const Rewards = () => {
   const [rewards, setRewards] = useState<any[]>([]);
   const workoutRef = useRef<ETarMuscle[]>([]);
+  const { handleUserSession } = useCheckSession();
 
   function getSelectedDate(date: IDate): void {
     fetchRewardsByDate(date?.dateObj as Date);
@@ -37,12 +39,10 @@ const Rewards = () => {
   }
 
   async function fetchRewardsByDate(date: Date) {
-    const session = await getSession();
-    const { user } = await checkUserExists(session?.user?.email);
-    const userId = user?.id;
+    const userId = localStorage.getItem(UserDetailsEnum.GAMIFIED_USER_ID);
 
-    if (date) {
-      const workout = await getWorkout(userId, date);
+    if (date && userId) {
+      const workout = await getWorkout(+userId, date);
       workoutRef.current = workout?.split as ETarMuscle[];
       const completedExer = workout?.exercises?.filter((exer) => isExerciseComplete(exer));
 
@@ -53,7 +53,10 @@ const Rewards = () => {
   }
 
   useEffect(() => {
-    fetchRewardsByDate(getTodaysDate()?.dateObj as Date);
+    (async function () {
+      await handleUserSession();
+      await fetchRewardsByDate(getTodaysDate()?.dateObj as Date);
+    })();
   }, []);
 
   return (

@@ -8,9 +8,10 @@ import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DayCalendarSkeleton, PickersDay, LocalizationProvider, PickersDayProps } from '@mui/x-date-pickers';
 import Badge from '@mui/material/Badge';
-import { ETarMuscle, IDate } from '../typings/common';
+import { ETarMuscle, IDate, UserDetailsEnum } from '../typings/common';
 import { cloneDeep } from 'lodash';
 import { fetchActiveDays } from './serverFunc';
+import { isPropEmpty } from '../utils/utilfunctions';
 
 const Date = ({ getSelectedDate, defaultDate, split }: { getSelectedDate: (date: IDate | any) => void; defaultDate?: Date; split?: ETarMuscle[] }) => {
   const dateContainerRef = useRef<HTMLDivElement>(null);
@@ -40,12 +41,14 @@ const Date = ({ getSelectedDate, defaultDate, split }: { getSelectedDate: (date:
 
   function getActiveDays(date: Dayjs, { signal }: { signal: AbortSignal }) {
     return new Promise<{ daysToHighlight: number[] }>((resolve, reject) => {
-      if (!selectedDate) {
+      const userId = localStorage.getItem(UserDetailsEnum.GAMIFIED_USER_ID);
+
+      if (!selectedDate || !userId) {
         return;
       }
 
       const timeout = setTimeout(async () => {
-        const activeDays = await fetchActiveDays(selectedDate?.dateObj as Date);
+        const activeDays = await fetchActiveDays(selectedDate?.dateObj as Date, +userId);
         const daysToHighlight = activeDays?.map((days) => days?.createdAt?.getDate());
 
         if (daysToHighlight) {
@@ -140,7 +143,9 @@ const Date = ({ getSelectedDate, defaultDate, split }: { getSelectedDate: (date:
       fetchHighlightedDays(initialValue);
     }, 100);
 
-    getSelectedDate(selectedDate);
+    if (!isPropEmpty(selectedDate)) {
+      getSelectedDate(selectedDate);
+    }
 
     return () => clearTimeout(timoeut);
   }, [selectedDate]);
@@ -155,8 +160,7 @@ const Date = ({ getSelectedDate, defaultDate, split }: { getSelectedDate: (date:
   return (
     <div className="sticky top-[1px] bg-primary z-50">
       <div className="flex items-center justify-between pb-3">
-
-        <div className='flex items-center'>
+        <div className="flex items-center">
           {split && split?.length > 0 ? (
             split?.map((splt, idx) => (
               <div className="flex items-center">

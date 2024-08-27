@@ -1,9 +1,10 @@
 'use client';
 
 import { useEffect } from 'react';
-import { checkUserExists, getSession, setSession, userRegister } from './serverFunc';
+import { setSession, userRegister } from './serverFunc';
 import { useRouter } from 'next/navigation';
 import { isPropEmpty } from '@/app/utils/utilfunctions';
+import { checkUserExists, getSession } from '@/app/globalServerFunc';
 
 const page = () => {
   const router = useRouter();
@@ -16,9 +17,18 @@ const page = () => {
 
       const { status, user } = await checkUserExists((res as any)?.token.email);
 
+      localStorage.setItem('GAMIFIED_USER_ID', user?.id);
+      localStorage.setItem('GAMIFIED_USER_NAME', user?.fullName);
+
+      // Credentials
       if (!['google', 'apple', 'facebook']?.includes((res as any)?.token?.provider)) {
-        await setSession(user?.id, (res as any)?.token?.id, res?.expires);
-        router.push('/home');
+        try {
+          await setSession(user?.id, (res as any)?.token?.id, res?.expires);
+        } catch (err) {
+          console.error(err);
+        } finally {
+          router.push('/home');
+        }
       }
 
       if (status === 403) {
