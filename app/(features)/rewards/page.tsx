@@ -4,7 +4,6 @@ import Date from '@/app/shared/Date';
 import { ETarMuscle, IDate, IExercise, UserDetailsEnum } from '@/app/typings/common';
 import { useEffect, useRef, useState } from 'react';
 import { getWorkout } from './serverFunc';
-import { getTodaysDate } from '@/app/utils/timeFormatUtils';
 import useCheckSession from '@/app/hooks/useCheckSession';
 
 const Rewards = () => {
@@ -55,7 +54,6 @@ const Rewards = () => {
   useEffect(() => {
     (async function () {
       await handleUserSession();
-      await fetchRewardsByDate(getTodaysDate()?.dateObj as Date);
     })();
   }, []);
 

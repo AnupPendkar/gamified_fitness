@@ -75,22 +75,22 @@ const SetTable = ({ sets }: { sets: any[] }) => {
           <TableBody>
             {datasource?.map((itm) => (
               <TableRow className="relative" onClick={() => handleClk(itm)} key={itm?.setNo}>
-                <TableCell align="center" width={'40%'}>
+                <TableCell align="center" width="15%">
                   <span className="fsr-16 font-isb ">{itm?.setNo}</span>
                   {/* <span className="fsr-16 font-isb ">Set {itm?.id}</span> */}
                 </TableCell>
 
-                <TableCell align="center" width={'15%'}>
+                <TableCell align="center" width="35%">
                   <span className="fsr-16 font-isb ">{itm?.weight} Iw</span>
                   {/* <span className="fsr-16 font-isb ">{itm?.weight} Kg</span> */}
                 </TableCell>
 
-                <TableCell align="center" width={'20%'}>
+                <TableCell align="center" width="25%">
                   <span className="fsr-16 font-isb ">{itm?.totalReps}</span>
                   {/* <span className="fsr-16 font-isb ">{itm?.reps} Reps</span> */}
                 </TableCell>
 
-                <TableCell align="center" width={'20%'}>
+                <TableCell align="center" width="25%">
                   <span className="fsr-16 font-isb ">{itm?.completedReps}</span>
                   {/* <span className="fsr-16 font-isb ">{itm?.reps} Reps</span> */}
                 </TableCell>
