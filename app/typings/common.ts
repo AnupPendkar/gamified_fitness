@@ -117,3 +117,9 @@ export enum UserDetailsEnum {
   GAMIFIED_USER_ID = 'GAMIFIED_USER_ID',
   GAMIFIED_USER_NAME = 'GAMIFIED_USER_NAME',
 }
+
+export enum StreakEnum {
+  CHECK_IN = 1,
+  MISS = 2,
+  DAY_OFF = 3,
+}

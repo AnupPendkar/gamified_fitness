@@ -10,6 +10,7 @@ const config: Config = {
         ternary: 'var(--color-ternary)',
 
         success: 'var(--color-success)',
+        error: 'var(--color-error)',
         background: 'var(--color-background)',
 
         primary_text: 'var(--color-text-primary)',
