@@ -63,16 +63,6 @@ const CustomThemeProvider = (props: MyThemeProviderProps) => {
         // },
 
         // Snackbar
-        '.MuiAlert-root': {
-          background: '#82C41E !important',
-          color: '#191919 !important',
-          fontFamily: 'Inter SemiBold !important',
-        },
-
-        '.MuiAlert-icon': {
-          color: '#191919 !important',
-        },
-
         '.MuiModal-backdrop': {
           backdropFilter: 'blur(10px) !important',
           background: '#6E7174 !important',

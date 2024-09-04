@@ -123,3 +123,23 @@ export enum StreakEnum {
   MISS = 2,
   DAY_OFF = 3,
 }
+
+export enum ToastColors {
+  WARNING = '#FFA500', // Orange
+  SUCCESS = '#4CAF50', // Green
+  ERROR = '#F44336', // Red
+  INFO = '#2196F3', // Blue
+}
+
+export interface ToasterProps {
+  id: string;
+  message: ToastMessage;
+  visible: boolean;
+  duration?: number;
+  onHide?: () => void;
+}
+
+export type ToastMessage = {
+  message: string;
+  type: 'ERROR' | 'INFO' | 'WARNING' | 'SUCCESS';
+};
