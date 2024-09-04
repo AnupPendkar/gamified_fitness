@@ -14,15 +14,11 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       credentials: {
         email: { label: 'Email', type: 'text' },
         password: { label: 'Password', type: 'password' },
-        id: { label: 'ID', type: 'text' },
-        name: { label: 'Name', type: 'text' },
       },
-      authorize: async ({ email, id, name, password }) => {
+      authorize: async ({ email, password }) => {
         const data = {
           email: email as string,
           password: password as string,
-          id: id as string,
-          name: name as string,
         };
 
         return data;
@@ -40,7 +36,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       }
       return token;
     },
-    session: async ({ session, token, user }: any) => {
+    session: async ({ session, token }: any) => {
       session.token = Object.assign(session.token ?? {}, {
         id: token.id,
         name: token.name,

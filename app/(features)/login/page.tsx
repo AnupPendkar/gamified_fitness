@@ -6,20 +6,13 @@ import Stack from '@/app/shared/Stack';
 import { EAuthAction, ELoginType } from '@/app/typings/common';
 import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import {
-  checkUserExists,
-  getSession,
-  handleAppleOAuthLogin,
-  handleCrendentialLogin,
-  handleMetaOAuthLogin,
-  handleGoogleOAuthLogin,
-  handleSignOut,
-  userLogin,
-  userRegister,
-} from './serverFunc';
+import { handleAppleOAuthLogin, handleCrendentialLogin, handleMetaOAuthLogin, handleGoogleOAuthLogin, handleSignOut, userLogin, userRegister } from './serverFunc';
+import { checkUserExists } from '@/app/globalServerFunc';
+import { useAppStore } from '@/app/zustand-store';
 
 const Authenticate = () => {
   const [loginType, setLoginType] = useState<ELoginType | null>();
+  const setToaster = useAppStore((state) => state.setToasterMessage);
   const stack = useRef<Stack>();
   const router = useRouter();
   const emailRef = useRef<string>('');
@@ -61,15 +54,19 @@ const Authenticate = () => {
   }
 
   async function handleSignIn(email: string, password: string) {
+    console.log(email, password);
     const { status, user } = await userLogin(email, password);
+    console.log(status, user);
 
     if (status === 200) {
       handleSignOut().then(() => {
         handleCrendentialLogin(email, password).then(async (res) => {
           stack.current?.push(ELoginType.SIGN_IN__email_pass);
-          setLoginType(ELoginType.SIGN_IN__otp);
+          // setLoginType(ELoginType.SIGN_IN__otp);
         });
       });
+    } else {
+      setToaster({ type: 'WARNING', message: 'Wrong Credentials' });
     }
   }
 
@@ -82,6 +79,8 @@ const Authenticate = () => {
       stack.current?.push(ELoginType.SIGN_UP__name_email);
       setLoginType(ELoginType.SIGN_UP__pass);
     }
+
+    return true;
   }
 
   async function handleSignUp(password: string) {
@@ -97,6 +96,16 @@ const Authenticate = () => {
     }
   }
 
+  async function handleCheckEmailValidity(email: string, name: string) {
+    const isExist = await handleEmailExists(email, name);
+    if (isExist) {
+      setToaster({ type: 'ERROR', message: 'Email Already Exists' });
+      return;
+    }
+
+    setLoginType(ELoginType.SIGN_UP__pass);
+  }
+
   function onSubmit(val: TAuthDataSchema) {
     switch (loginType) {
       case ELoginType.SIGN_IN__email_pass:
@@ -110,7 +119,7 @@ const Authenticate = () => {
         break;
 
       case ELoginType.SIGN_UP__name_email:
-        handleEmailExists(val?.email, val?.name);
+        handleCheckEmailValidity(val?.email, val?.name);
         break;
 
       case ELoginType.SIGN_UP__pass:

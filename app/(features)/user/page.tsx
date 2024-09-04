@@ -7,8 +7,18 @@ import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import PolicyOutlinedIcon from '@mui/icons-material/PolicyOutlined';
 import EmojiEventsOutlinedIcon from '@mui/icons-material/EmojiEventsOutlined';
 import ExitToAppOutlinedIcon from '@mui/icons-material/ExitToAppOutlined';
+import useCheckSession from '@/app/hooks/useCheckSession';
+import { useEffect } from 'react';
 
 const User = () => {
+  const { handleUserSession } = useCheckSession();
+
+  useEffect(() => {
+    (async function () {
+      await handleUserSession();
+    })();
+  }, []);
+
   return (
     <div className="p-global">
       <div className="flex flex-col items-center gap-3 mb-7 mt-3">

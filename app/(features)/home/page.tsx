@@ -1,18 +1,20 @@
 'use client';
 
 import Date from '@/app/shared/Date';
-import { IDate, IExercise, IWorkout } from '@/app/typings/common';
+import { IDate, IExercise, IWorkout, UserDetailsEnum } from '@/app/typings/common';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { useRef, useState } from 'react';
-import { checkUserExists, getSession, getWorkout } from './serverFunc';
+import { useEffect, useRef, useState } from 'react';
+import { getWorkout } from './serverFunc';
 import { useContext } from '../context';
+import useCheckSession from '@/app/hooks/useCheckSession';
 
 const Home = () => {
   const [exercises, setExercises] = useState<IExercise[]>([]);
   const { setExerciseFunc, setWorkout, workout, setCurrSelectedDate, selectedDate } = useContext();
   const dateRef = useRef<Date>();
   const router = useRouter();
+  const { handleUserSession } = useCheckSession();
 
   function handleWorkoutClk(itm) {
     setExerciseFunc(itm);
@@ -40,12 +42,10 @@ const Home = () => {
   }
 
   async function fetchWorkoutList(date: Date) {
-    const session = await getSession();
-    const { user } = await checkUserExists(session?.user?.email);
-    const userId = user?.id;
+    const userId = localStorage.getItem(UserDetailsEnum.GAMIFIED_USER_ID);
 
-    if (date) {
-      const workout = await getWorkout(userId, date);
+    if (date && userId) {
+      const workout = await getWorkout(+userId, date);
       setWorkout(workout as unknown as IWorkout);
       constructWorkout(workout as unknown as IWorkout);
     }
@@ -66,6 +66,12 @@ const Home = () => {
 
     return (completedSets * 100) / totSets;
   }
+
+  useEffect(() => {
+    (async function () {
+      await handleUserSession();
+    })();
+  }, []);
 
   return (
     <div className="p-global">
