@@ -45,7 +45,7 @@ const Footer = () => {
 
   return (
     <>
-      {pathname !== '/login' && (
+      {!['/sign-in', '/sign-up']?.includes(pathname as string) && (
         <div className="app-footer h-[55px] rounded-xl flex justify-between px-4 bg-success m-global">
           {menu.map((itm) => (
             <div key={itm?.id} onClick={() => onMenuClk(itm?.route)} className="h-full flex justify-center items-center">

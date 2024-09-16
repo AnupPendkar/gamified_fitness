@@ -1,37 +1,36 @@
 'use client';
 import { useRouter } from 'next/navigation';
 import { isPropEmpty } from '../utils/utilfunctions';
-import { checkUserExists, getSession } from '../globalServerFunc';
-
+import { fetchUserId, fetchUserDetails } from '../globalServerFunc';
 const useCheckSession = () => {
   const router = useRouter();
 
-  async function getUserSession() {
-    const session = await getSession();
-    return session;
+  async function getUserId() {
+    const userId = await fetchUserId();
+    console.log({ userId });
+    return userId;
   }
 
   async function getUser() {
-    const session = await getUserSession();
-    const user = await checkUserExists(session?.user?.email);
+    const user = await fetchUserDetails();
     return user;
   }
 
   async function handleUserSession() {
     try {
-      const session = await getUserSession();
-      if (isPropEmpty(session)) {
-        router.push('/login');
+      const userId = await getUserId();
+      if (isPropEmpty(userId)) {
+        router.push('/sign-in');
       }
     } catch (err) {
-      console.error('Error fetching session:', err);
-      router.push('/login');
+      console.error('Error fetching userId:', err);
+      router.push('/sign-in');
     }
   }
 
   return {
     handleUserSession,
-    getUserSession,
+    getUserId,
     getUser,
   };
 };

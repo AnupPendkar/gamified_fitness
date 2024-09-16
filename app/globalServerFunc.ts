@@ -1,22 +1,28 @@
 'use server';
+import { auth, currentUser, clerkClient } from '@clerk/nextjs/server';
 
-import { isPropEmpty } from '@/app/utils/utilfunctions';
-import { auth } from '@/auth';
-import { db } from '@/lib/db';
-import { eq } from 'drizzle-orm';
-import { users } from '@/lib/schema/User';
-
-export async function getSession() {
-  const user = await auth();
-  return user;
+export async function fetchUserId() {
+  const { userId } = auth();
+  if (userId) {
+    const user = await currentUser();
+    return user?.id;
+  }
+  // const user = await auth();
 }
 
-export async function checkUserExists(email): Promise<{ status: number; message: string; user?: any }> {
-  const [user, ...rest] = await db.select().from(users).where(eq(users?.email, email));
+export async function fetchUserDetails(): Promise<{ status: number; message: string; user?: any }> {
+  const { userId } = auth();
 
-  if (isPropEmpty(user)) {
-    return { status: 403, message: 'User not found.' };
-  } else {
-    return { status: 200, message: 'User exists!', user };
+  if (!userId) {
+    return { status: 401, message: 'Unauthorized' };
+    // return res.status(401).json({ error: 'Unauthorized' });
   }
+
+  const user = await clerkClient().users.getUser(userId);
+  console.log(user?.firstName);
+
+  // use the user object to decide what data to return
+
+  return { status: 200, message: 'User exists!', user };
+  // return res.status(200).json({});
 }

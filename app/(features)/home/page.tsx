@@ -8,12 +8,15 @@ import { useEffect, useRef, useState } from 'react';
 import { getWorkout } from './serverFunc';
 import { useContext } from '../context';
 import useCheckSession from '@/app/hooks/useCheckSession';
+import { useUser } from '@clerk/nextjs';
 
 const Home = () => {
   const [exercises, setExercises] = useState<IExercise[]>([]);
   const { setExerciseFunc, setWorkout, workout, setCurrSelectedDate, selectedDate } = useContext();
   const dateRef = useRef<Date>();
   const router = useRouter();
+  // const { isLoaded, userId, sessionId, getToken } = useAuth();
+  const { isLoaded, isSignedIn, user } = useUser();
   const { handleUserSession } = useCheckSession();
 
   function handleWorkoutClk(itm) {
@@ -71,7 +74,7 @@ const Home = () => {
     (async function () {
       await handleUserSession();
     })();
-  }, []);
+  });
 
   return (
     <div className="p-global">

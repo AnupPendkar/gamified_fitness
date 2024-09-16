@@ -12,6 +12,8 @@
   },
   "dependencies": {
     "@auth/drizzle-adapter": "^1.4.1",
+    "@clerk/elements": "^0.15.2",
+    "@clerk/nextjs": "^5.5.2",
     "@emotion/cache": "^11.11.0",
     "@emotion/react": "^11.11.4",
     "@emotion/server": "^11.11.0",
@@ -27,6 +29,7 @@
     "dayjs": "^1.11.11",
     "dotenv": "^16.4.5",
     "drizzle-orm": "^0.29.5",
+    "formik": "^2.4.6",
     "lodash": "^4.17.21",
     "mui-one-time-password-input": "^2.0.2",
     "next": "14.2.3",
@@ -38,6 +41,7 @@
     "react-dom": "^18",
     "react-hook-form": "^7.52.0",
     "tsx": "^4.11.0",
+    "yup": "^1.4.0",
     "zod": "^3.23.8",
     "zustand": "^4.5.5"
   },

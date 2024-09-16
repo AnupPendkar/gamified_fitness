@@ -7,7 +7,7 @@ import { EAuthAction, ELoginType } from '@/app/typings/common';
 import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { handleAppleOAuthLogin, handleCrendentialLogin, handleMetaOAuthLogin, handleGoogleOAuthLogin, handleSignOut, userLogin, userRegister } from './serverFunc';
-import { checkUserExists } from '@/app/globalServerFunc';
+import { fetchUserDetails } from '@/app/globalServerFunc';
 import { useAppStore } from '@/app/zustand-store';
 
 const Authenticate = () => {
@@ -71,7 +71,7 @@ const Authenticate = () => {
   }
 
   async function handleEmailExists(email: string, name: string) {
-    const { status, message } = await checkUserExists(email);
+    const { status, message } = await fetchUserDetails();
 
     if (status === 403) {
       emailRef.current = email;

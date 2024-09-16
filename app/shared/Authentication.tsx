@@ -10,8 +10,10 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useRouter } from 'next/navigation';
 import * as z from 'zod';
 import { isPropEmpty } from '../utils/utilfunctions';
+import { SignIn } from '@clerk/nextjs';
 
 const schema = z
   .object({
@@ -43,6 +45,7 @@ const Authentication = ({ currType, onSubmit, onActionClk }: IAuthenticationProp
   const [submitText, setSubmitText] = useState<string>();
   const [fields, setFields] = useState<ELoginField[]>([]);
   const [isPasswordVisible, setPasswordVisibility] = useState(false);
+  const router = useRouter();
 
   const [render, setRender] = useState<number>(0);
 
@@ -77,7 +80,7 @@ const Authentication = ({ currType, onSubmit, onActionClk }: IAuthenticationProp
         break;
 
       case ELoginType.SIGN_UP__name_email:
-        setFields([ELoginField.NAME, ELoginField.EMAIL]);
+        setFields([ELoginField.NAME, ELoginField.EMAIL, ELoginField.PASSWORD]);
         setHeading('Sign Up');
         setSubmitText('Continue');
         break;
@@ -115,7 +118,7 @@ const Authentication = ({ currType, onSubmit, onActionClk }: IAuthenticationProp
   async function _onSubmit(data: TAuthDataSchema) {}
 
   function handleFormSubmit() {
-    onSubmit(getValues());
+    onSubmit({ ...getValues(), otp: otp as string });
   }
 
   function getFormValidity() {
@@ -146,7 +149,7 @@ const Authentication = ({ currType, onSubmit, onActionClk }: IAuthenticationProp
             <div className="field flex flex-col items-center mt-4">
               <p className="text-[14px] inter text-secondary_text">We`ve sent an OTP code to your email,</p>
               <p className="text-[14px] inter text-primary_text mb-3">User53684@gmail.com</p>
-              <MuiOtpInput sx={{ maxWidth: 240 }} value={otp} onChange={handleChange} />
+              <MuiOtpInput length={6} sx={{ maxWidth: 240 }} value={otp} onChange={handleChange} />
             </div>
           )}
 
@@ -282,7 +285,7 @@ const Authentication = ({ currType, onSubmit, onActionClk }: IAuthenticationProp
           </div>
 
           {hasLoginType([ELoginType.SIGN_IN__email_pass]) && (
-            <div onClick={() => onActionClk(EAuthAction.SIGN_UP)} className="flex flex-col items-center mt-5">
+            <div onClick={() => router.push('/sign-up')} className="flex flex-col items-center mt-5">
               <p className="text-[14px] inter text-secondary_text">
                 Dont have account? <span className="text-[12px] text-primary_text font-isb ml-1">Create Account</span>
               </p>
@@ -290,7 +293,7 @@ const Authentication = ({ currType, onSubmit, onActionClk }: IAuthenticationProp
           )}
 
           {hasLoginType([ELoginType.SIGN_UP__name_email, ELoginType.SIGN_UP__pass]) && (
-            <div onClick={() => onActionClk(EAuthAction.SIGN_IN)} className="flex flex-col items-center mt-5">
+            <div onClick={() => router.push('/sign-in')} className="flex flex-col items-center mt-5">
               <p className="text-[14px] inter text-secondary_text">
                 Already have account? <span className="text-[12px] text-primary_text font-isb ml-1">Sign In</span>
               </p>
@@ -305,7 +308,19 @@ const Authentication = ({ currType, onSubmit, onActionClk }: IAuthenticationProp
                 <p className="text-[14px] inter text-secondary_text">Or</p>
               </div>
 
-              <div className="flex items-center justify-center gap-x-4 mt-8">
+              <SignIn
+                path="/sign-in"
+                routing="path"
+                signUpUrl="/sign-up"
+                appearance={{
+                  elements: {
+                    formFieldRow__firstName: false,
+                    formField__emailAddress: false,
+                  },
+                }}
+              />
+
+              {/* <div className="flex items-center justify-center gap-x-4 mt-8">
                 <div onClick={() => onActionClk(EAuthAction.GOOGLE)} className="flex items-center justify-center rounded-[50%] bg-secondary p-3">
                   <Image src={'images/google_icon.svg'} width={20} height={20} alt="Google Icon" />
                 </div>
@@ -317,7 +332,7 @@ const Authentication = ({ currType, onSubmit, onActionClk }: IAuthenticationProp
                 <div onClick={() => onActionClk(EAuthAction.META)} className="flex items-center justify-center rounded-[50%] bg-secondary p-3">
                   <Image src={'images/meta_icon.svg'} width={20} height={20} alt="Meta Icon" />
                 </div>
-              </div>
+              </div> */}
             </div>
           )}
         </div>
