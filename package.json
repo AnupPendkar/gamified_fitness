@@ -11,8 +11,6 @@
     "db:seed": "node --import tsx ./lib/seed.ts"
   },
   "dependencies": {
-    "@auth/drizzle-adapter": "^1.4.1",
-    "@clerk/elements": "^0.15.2",
     "@clerk/nextjs": "^5.5.2",
     "@emotion/cache": "^11.11.0",
     "@emotion/react": "^11.11.4",

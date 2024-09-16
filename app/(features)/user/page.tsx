@@ -9,9 +9,11 @@ import EmojiEventsOutlinedIcon from '@mui/icons-material/EmojiEventsOutlined';
 import ExitToAppOutlinedIcon from '@mui/icons-material/ExitToAppOutlined';
 import useCheckSession from '@/app/hooks/useCheckSession';
 import { useEffect } from 'react';
+import { useClerk } from '@clerk/nextjs';
 
 const User = () => {
   const { handleUserSession } = useCheckSession();
+  const { user, signOut } = useClerk();
 
   useEffect(() => {
     (async function () {
@@ -22,8 +24,8 @@ const User = () => {
   return (
     <div className="p-global">
       <div className="flex flex-col items-center gap-3 mb-7 mt-3">
-        <Image src={'/images/profile_img.jpg'} width={90} height={90} className="rounded-[50%] h-[90px]" alt="Profile Img" />
-        <span className="fsr-18 font-isb">Esther Howard</span>
+        <Image src={user?.imageUrl ?? '/images/profile_img.jpg'} width={90} height={90} className="rounded-[50%] h-[90px]" alt="Profile Img" />
+        <span className="fsr-18 font-isb">{user?.fullName}</span>
       </div>
 
       <div className="flex flex-col gap-4">
@@ -32,6 +34,7 @@ const User = () => {
             <PersonIcon />
             <span className="fsr-16 inter">Profile</span>
           </div>
+
           <ArrowForwardIosIcon sx={{ width: '18px' }} />
         </div>
 
@@ -67,7 +70,7 @@ const User = () => {
           <ArrowForwardIosIcon sx={{ width: '18px' }} />
         </div>
 
-        <div className="flex items-center py-1">
+        <div onClick={() => signOut()} className="flex items-center py-1">
           <div className="flex items-center gap-2 mr-auto">
             <ExitToAppOutlinedIcon />
             <span className="fsr-16 inter">Logout</span>

@@ -17,15 +17,9 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en">
-        <body>
+        <body className='App'>
           <Providers>{children}</Providers>
           <Footer></Footer>
-          {/* <SignedOut>
-            <SignInButton />
-          </SignedOut>
-          <SignedIn>
-            <UserButton />
-          </SignedIn> */}
         </body>
       </html>
     </ClerkProvider>

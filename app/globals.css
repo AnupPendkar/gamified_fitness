@@ -67,6 +67,31 @@ input:-webkit-autofill {
   margin-bottom: 20px;
 }
 
+.cl-cardBox {
+  box-shadow: none;
+}
+.cl-card {
+  background-color: transparent;
+}
+.cl-header {
+  display: none;
+}
+.cl-footer {
+  display: none;
+}
+.cl-dividerRow {
+  display: none;
+}
+.cl-form {
+  display: none;
+}
+.cl-socialButtons {
+  display: flex;
+}
+.cl-socialButtonsIconButton {
+  background: var(--color-text-primary);
+}
+
 /* .glow {
   box-shadow: 0 0 50px 15px var(--color-success);
 } */
